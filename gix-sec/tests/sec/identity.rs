@@ -23,3 +23,21 @@ fn windows_home() -> crate::Result {
     assert!(gix_sec::identity::is_path_owned_by_current_user(&home)?);
     Ok(())
 }
+
+#[test]
+fn test_trust_behavior_scenarios() {
+    // Test 1: Current directory (should work)
+    let current_dir = std::env::current_dir().unwrap();
+    println!("Testing current directory: {:?}", current_dir);
+    match gix_sec::identity::is_path_owned_by_current_user(&current_dir) {
+        Ok(owned) => println!("  Result: owned = {}", owned),
+        Err(e) => println!("  Error: {}", e),
+    }
+    
+    // Test 3: Trust from path ownership
+    println!("Testing trust derivation from path ownership:");
+    match gix_sec::Trust::from_path_ownership(&current_dir) {
+        Ok(trust) => println!("  Trust level: {:?}", trust),
+        Err(e) => println!("  Error: {}", e),
+    }
+}
