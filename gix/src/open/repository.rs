@@ -299,7 +299,13 @@ impl ThreadSafeRepository {
                     | gix_config::Source::Cli
                     | gix_config::Source::Api
                     | gix_config::Source::EnvOverride => wt_path,
-                    _ => git_dir.join(wt_path).into(),
+                    _ => {
+                        if wt_path.is_absolute() {
+                            wt_path
+                        } else {
+                            git_dir.join(wt_path).into()
+                        }
+                    }
                 };
                 worktree_dir = gix_path::normalize(wt_path, current_dir).map(Cow::into_owned);
                 #[allow(unused_variables)]
