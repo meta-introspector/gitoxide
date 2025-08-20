@@ -4,5 +4,6 @@ mod ident;
 mod pipeline;
 mod worktree;
 mod cat_driver;
+mod regression_2080;
 
 pub use gix_testtools::Result;
