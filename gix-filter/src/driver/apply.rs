@@ -111,9 +111,15 @@ impl State {
     ) -> Result<Option<MaybeDelayed<'a>>, Error> {
         match self.maybe_launch_process(driver, operation, ctx.rela_path)? {
             Some(Process::SingleFile { mut child, command }) => {
-                std::io::copy(src, &mut child.stdin.take().expect("configured"))?;
+                // Use communicate-style I/O to avoid deadlock with commands like 'cat'
+                let stdout_data = communicate(
+                    src,
+                    child.stdin.take().expect("configured"),
+                    child.stdout.take().expect("configured")
+                )?;
+                
                 Ok(Some(MaybeDelayed::Immediate(Box::new(ReadFilterOutput {
-                    inner: child.stdout.take(),
+                    inner: Some(Box::new(std::io::Cursor::new(stdout_data))),
                     child: driver.required.then_some((child, command)),
                 }))))
             }
@@ -204,7 +210,7 @@ pub enum MaybeDelayed<'a> {
 
 /// A utility type to facilitate streaming the output of a filter process.
 struct ReadFilterOutput {
-    inner: Option<std::process::ChildStdout>,
+    inner: Option<Box<dyn std::io::Read>>,
     /// The child is present if we need its exit code to be positive.
     child: Option<(std::process::Child, std::process::Command)>,
 }
@@ -239,5 +245,72 @@ impl std::io::Read for ReadFilterOutput {
             }
             None => Ok(0),
         }
+    }
+}
+
+/// Communicate with a child process by writing to stdin while reading from stdout.
+/// This avoids deadlocks that can occur with std::io::copy when the output buffer fills up.
+/// 
+/// This implementation uses threads to handle concurrent reading and writing,
+/// which is necessary to avoid deadlocks when the pipe buffers fill up.
+fn communicate(
+    input: &mut dyn std::io::Read,
+    stdin: std::process::ChildStdin,
+    stdout: std::process::ChildStdout,
+) -> std::io::Result<Vec<u8>> {
+    use std::io::{Read, Write};
+    use std::sync::mpsc;
+    use std::thread;
+    
+    // Read all input data first (this might not be ideal for very large inputs, 
+    // but it's simpler and matches the current API)
+    let mut input_data = Vec::new();
+    input.read_to_end(&mut input_data)?;
+    
+    // Channel for communicating the result from the output reader thread
+    let (output_tx, output_rx) = mpsc::channel();
+    
+    // Channel for communicating errors from the input writer thread
+    let (error_tx, error_rx) = mpsc::channel();
+    
+    // Spawn thread to write to stdin
+    let input_data_clone = input_data.clone();
+    let error_tx_clone = error_tx.clone();
+    thread::spawn(move || {
+        let mut stdin = stdin;
+        if let Err(e) = stdin.write_all(&input_data_clone) {
+            let _ = error_tx_clone.send(e);
+        }
+        // Close stdin by dropping it
+    });
+    
+    // Spawn thread to read from stdout
+    thread::spawn(move || {
+        let mut stdout = stdout;
+        let mut output_data = Vec::new();
+        match stdout.read_to_end(&mut output_data) {
+            Ok(_) => {
+                let _ = output_tx.send(Ok(output_data));
+            }
+            Err(e) => {
+                let _ = output_tx.send(Err(e));
+            }
+        }
+    });
+    
+    // Wait for output or error
+    match output_rx.recv() {
+        Ok(Ok(data)) => {
+            // Check if there was a write error
+            if let Ok(error) = error_rx.try_recv() {
+                return Err(error);
+            }
+            Ok(data)
+        }
+        Ok(Err(e)) => Err(e),
+        Err(_) => Err(std::io::Error::new(
+            std::io::ErrorKind::Other,
+            "Communication with child process failed"
+        )),
     }
 }
