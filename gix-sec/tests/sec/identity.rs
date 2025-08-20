@@ -9,6 +9,14 @@ fn is_path_owned_by_current_user() -> crate::Result {
 }
 
 #[test]
+fn is_path_owned_by_current_user_nonexistent() {
+    let nonexistent = std::path::Path::new("/this/path/does/not/exist");
+    let result = gix_sec::identity::is_path_owned_by_current_user(nonexistent);
+    assert!(result.is_err(), "Should fail for nonexistent paths");
+    assert_eq!(result.unwrap_err().kind(), std::io::ErrorKind::NotFound);
+}
+
+#[test]
 #[cfg(windows)]
 fn windows_home() -> crate::Result {
     let home = gix_path::env::home_dir().expect("home dir is available");
