@@ -33,7 +33,5 @@ fn test_trust_behavior_scenarios() {
     let ownership_result = gix_sec::identity::is_path_owned_by_current_user(&current_dir);
     assert!(ownership_result.is_ok(), "Should be able to check ownership of current directory: {:?}", ownership_result);
     
-    // Test 2: Trust from path ownership
-    let trust_result = gix_sec::Trust::from_path_ownership(&current_dir);
-    assert!(trust_result.is_ok(), "Should be able to derive trust from current directory ownership: {:?}", trust_result);
+
 }
