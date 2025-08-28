@@ -81,8 +81,9 @@ pub enum ArgumentSafety<'a> {
 /// # Mutability Warning
 ///
 /// Due to the mutability of this type, it's possible that the URL serializes to something invalid
-/// when fields are modified directly. The URL should be accepted as a parameter directly rather
-/// than being reconstructed, to maintain validity guarantees.
+/// when fields are modified directly. URLs should always be parsed to this type from string or byte
+/// parameters, but never be accepted as an instance of this type and then reconstructed, to maintain
+/// validity guarantees.
 ///
 /// # Security Warning
 ///
