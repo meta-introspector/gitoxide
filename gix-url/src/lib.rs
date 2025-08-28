@@ -78,6 +78,12 @@ pub enum ArgumentSafety<'a> {
 ///
 /// Additionally there is support for [deserialization](Url::from_bytes()) and [serialization](Url::to_bstring()).
 ///
+/// # Mutability Warning
+///
+/// Due to the mutability of this type, it's possible that the URL serializes to something invalid
+/// when fields are modified directly. The URL should be accepted as a parameter directly rather
+/// than being reconstructed, to maintain validity guarantees.
+///
 /// # Security Warning
 ///
 /// URLs may contain passwords and using standard [formatting](std::fmt::Display) will redact
@@ -93,13 +99,13 @@ pub struct Url {
     /// The URL scheme.
     pub scheme: Scheme,
     /// The user to impersonate on the remote.
-    user: Option<String>,
+    pub user: Option<String>,
     /// The password associated with a user.
-    password: Option<String>,
+    pub password: Option<String>,
     /// The host to which to connect. Localhost is implied if `None`.
-    host: Option<String>,
+    pub host: Option<String>,
     /// When serializing, use the alternative forms as it was parsed as such.
-    serialize_alternative_form: bool,
+    pub serialize_alternative_form: bool,
     /// The port to use when connecting to a host. If `None`, standard ports depending on `scheme` will be used.
     pub port: Option<u16>,
     /// The path portion of the URL, usually the location of the git repository.
