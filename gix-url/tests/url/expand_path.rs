@@ -39,10 +39,7 @@ fn without_username() -> crate::Result {
 fn with_username() -> crate::Result {
     let (user, resolved_path) = expand_path::parse(b"/~byron/hello/git".as_bstr())?;
     let resolved_path = expand_path::with(user.as_ref(), resolved_path.as_ref(), |user: &ForUser| match user {
-        ForUser::Current => {
-            // This test expects a specific user name, not the current user
-            None // Return None to trigger the MissingHome error
-        },
+        ForUser::Current => unreachable!("we have a name"),
         ForUser::Name(name) => Some(user_home(name.to_str_lossy().as_ref())),
     })?;
     assert_eq!(resolved_path, expected_path());

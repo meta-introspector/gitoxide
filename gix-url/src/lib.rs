@@ -354,8 +354,7 @@ impl Url {
             }
             (None, None) => {}
             (Some(_user), None) => {
-                return Err(std::io::Error::new(
-                    std::io::ErrorKind::InvalidData,
+                return Err(std::io::Error::other(
                     "Invalid URL structure: user specified without host"
                 ));
             }
@@ -383,8 +382,7 @@ impl Url {
             }
             (None, None) => {}
             (Some(_user), None) => {
-                return Err(std::io::Error::new(
-                    std::io::ErrorKind::InvalidData,
+                return Err(std::io::Error::other(
                     "Invalid URL structure: user specified without host"
                 ));
             }
