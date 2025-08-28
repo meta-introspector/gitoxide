@@ -353,7 +353,12 @@ impl Url {
                 out.write_all(host.as_bytes())?;
             }
             (None, None) => {}
-            (Some(_user), None) => unreachable!("BUG: should not be possible to have a user but no host"),
+            (Some(_user), None) => {
+                return Err(std::io::Error::new(
+                    std::io::ErrorKind::InvalidData,
+                    "Invalid URL structure: user specified without host"
+                ));
+            }
         }
         if let Some(port) = &self.port {
             write!(out, ":{port}")?;
@@ -377,7 +382,12 @@ impl Url {
                 out.write_all(host.as_bytes())?;
             }
             (None, None) => {}
-            (Some(_user), None) => unreachable!("BUG: should not be possible to have a user but no host"),
+            (Some(_user), None) => {
+                return Err(std::io::Error::new(
+                    std::io::ErrorKind::InvalidData,
+                    "Invalid URL structure: user specified without host"
+                ));
+            }
         }
         assert!(self.port.is_none(), "BUG: cannot serialize port in alternative form");
         if self.scheme == Scheme::Ssh {

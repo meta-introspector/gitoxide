@@ -28,11 +28,15 @@ pub enum Error {
     MissingRepositoryPath { url: BString, kind: UrlKind },
     #[error("URL {url:?} is relative which is not allowed in this context")]
     RelativeUrl { url: String },
+    #[error("URL has invalid structure: user specified without host")]
+    InvalidUrlStructure,
 }
 
 impl From<Infallible> for Error {
     fn from(_: Infallible) -> Self {
-        unreachable!("Cannot actually happen, but it seems there can't be a blanket impl for this")
+        // This should theoretically never happen since Infallible can never be constructed,
+        // but with public URL fields, we need to handle it gracefully
+        Error::InvalidUrlStructure
     }
 }
 
