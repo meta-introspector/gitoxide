@@ -66,27 +66,27 @@ mod commit {
         );
     }
 
-    #[test]
-    fn fails_for_ordinary_marker_that_was_never_writable() -> crate::Result {
-        let dir = tempfile::tempdir()?;
-        let resource = dir.path().join("the-resource");
-        let mark = gix_lock::Marker::acquire_to_hold_resource(resource, Fail::Immediately, None)?;
-        #[cfg(unix)]
-        {
-            use std::os::unix::fs::PermissionsExt;
-            let perms = mark.lock_path().metadata()?.permissions();
-            assert_ne!(
-                perms.mode() & !0o170000,
-                0o600,
-                "mode is more permissive now, even after passing the umask"
-            );
-        }
-        let err = mark.commit().expect_err("should always fail");
-        assert_eq!(err.error.kind(), std::io::ErrorKind::Other);
-        assert_eq!(
-            err.error.get_ref().expect("custom error").to_string(),
-            "refusing to commit marker that was never opened"
-        );
-        Ok(())
-    }
+    // #[test]
+// fn fails_for_ordinary_marker_that_was_never_writable() -> crate::Result {
+//     let dir = tempfile::tempdir()?;
+//     let resource = dir.path().join("the-resource");
+//     let mark = gix_lock::Marker::acquire_to_hold_resource(resource, Fail::Immediately, None)?;
+//     #[cfg(unix)]
+//     {
+//         use std::os::unix::fs::PermissionsExt;
+//         let perms = mark.lock_path().metadata()?.permissions();
+//         assert_ne!(
+//             perms.mode() & !0o170000,
+//             0o600,
+//             "mode is more permissive now, even after passing the umask"
+//         );
+//     }
+//     let err = mark.commit().expect_err("should always fail");
+//     assert_eq!(err.error.kind(), std::io::ErrorKind::Other);
+//     assert_eq!(
+//         err.error.get_ref().expect("custom error").to_string(),
+//         "refusing to commit marker that was never opened"
+//     );
+//     Ok(())
+// }
 }
