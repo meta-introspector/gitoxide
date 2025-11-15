@@ -383,3 +383,6 @@ large_stack_arrays = "allow"
 # Fix one day
 result_large_err = "allow"
 large_enum_variant = "allow"
+
+[package.metadata.cargo2nix]
+cargo2nix_path = "/data/data/com.termux.nix/files/home/pick-up-nix2/vendor/rust/cargo2nix/target/debug/cargo2nix"

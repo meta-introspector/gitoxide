@@ -1,5 +1,10 @@
-[source.crates-io]
-replace-with = "vendored-sources"
+# [source.crates-io]
 
-[source.vendored-sources]
-directory = "vendor"
+
+# [patch.crates-io]
+# hashbrown = { git = "https://github.com/meta-introspector/hashbrown", branch = "feature/CRQ-016-nixify" }
+# #rev = "061804bc"
+
+
+# [source.vendored-sources]
+# directory = "vendor"
