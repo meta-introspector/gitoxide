@@ -18,7 +18,7 @@ anyhow = "1.0.76"
 path = ".."
 
 # Prevent this from interfering with workspaces
-[workspace]
+#[workspace]
 members = ["."]
 
 [[bin]]

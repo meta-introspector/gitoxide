@@ -24,6 +24,11 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "683d7910e743518b0e34f1186f92494becacb047c7b6bf616c96772180fef923"
 
 [[package]]
+name = "allocator-api2"
+version = "0.3.1"
+source = "git+https://github.com/meta-introspector/allocator-api2?branch=feature/CRQ-016-nixify#2f6493fe6ad780dfa702c37c45664c61ab0f5a27"
+
+[[package]]
 name = "anes"
 version = "0.1.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -882,6 +887,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "dashmap"
+version = "7.0.0-rc2"
+source = "git+https://github.com/meta-introspector/dashmap?branch=feature/CRQ-016-nixify#6846c9ae62a9c4aa40553a98f3f1a21b68da850f"
+dependencies = [
+ "cfg-if",
+ "crossbeam-utils",
+ "equivalent",
+ "hashbrown 0.16.0 (git+https://github.com/meta-introspector/hashbrown?branch=feature/CRQ-016-nixify)",
+ "lock_api",
+ "parking_lot_core",
+]
+
+[[package]]
 name = "defer"
 version = "0.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1283,16 +1301,19 @@ dependencies = [
 name = "gitoxide"
 version = "0.46.0"
 dependencies = [
+ "allocator-api2 0.3.1",
  "anyhow",
  "clap",
  "clap_complete",
  "crosstermion",
+ "dashmap 7.0.0-rc2",
  "document-features",
  "env_logger",
  "futures-lite",
  "gitoxide-core",
  "gix",
  "gix-features",
+ "hashbrown 0.16.0 (git+https://github.com/meta-introspector/hashbrown?branch=feature/CRQ-016-nixify)",
  "is-terminal",
  "prodash",
  "serde_derive",
@@ -2358,7 +2379,7 @@ dependencies = [
 name = "gix-tempfile"
 version = "19.0.1"
 dependencies = [
- "dashmap",
+ "dashmap 6.1.0",
  "document-features",
  "gix-fs",
  "libc",
@@ -2664,7 +2685,7 @@ version = "0.15.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9229cfe53dfd69f0609a49f65461bd93001ea1ef889cd5529dd176593f5338a1"
 dependencies = [
- "allocator-api2",
+ "allocator-api2 0.2.21",
  "equivalent",
  "foldhash 0.1.5",
 ]
@@ -2680,7 +2701,7 @@ name = "hashbrown"
 version = "0.16.0"
 source = "git+https://github.com/meta-introspector/hashbrown?branch=feature/CRQ-016-nixify#b5136087f559cab6f4592bd7204108f77bb201a0"
 dependencies = [
- "allocator-api2",
+ "allocator-api2 0.2.21",
  "equivalent",
  "foldhash 0.2.0",
  "parking_lot_core",

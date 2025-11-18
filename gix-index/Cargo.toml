@@ -9,7 +9,7 @@ description = "A work-in-progress crate of the gitoxide project dedicated implem
 authors = ["Sebastian Thiel <sebastian.thiel@icloud.com>"]
 edition = "2021"
 include = ["src/**/*", "LICENSE-*", "README.md"]
-rust-version = "1.82"
+# rust-version = "1.82"
 autotests = false
 
 
@@ -19,36 +19,34 @@ test = true
 
 [features]
 ## Data structures implement `serde::Serialize` and `serde::Deserialize`.
-serde = ["dep:serde", "smallvec/serde", "gix-hash/serde"]
+serde = [
+#"dep:serde",
+"smallvec/serde", "gix-hash/serde"]
 
 [dependencies]
-gix-features = { version = "^0.44.1", path = "../gix-features", features = [
-    "progress",
-] }
-gix-hash = { version = "^0.20.1", path = "../gix-hash" }
-gix-bitmap = { version = "^0.2.15", path = "../gix-bitmap" }
-gix-object = { version = "^0.51.1", path = "../gix-object" }
-gix-validate = { version = "^0.10.1", path = "../gix-validate" }
-gix-traverse = { version = "^0.48.0", path = "../gix-traverse" }
-gix-lock = { version = "^19.0.0", path = "../gix-lock" }
-gix-fs = { version = "^0.17.0", path = "../gix-fs" }
-gix-utils = { version = "^0.3.1", path = "../gix-utils" }
+gix-features.workspace = true #{ version.workspace = true #"^0.44.1", path.workspace = true #"../gix-features", features.workspace = true #[
+#    "progress",
+#] }
+gix-hash.workspace = true #{ version.workspace = true #"^0.20.1", path.workspace = true #"../gix-hash" }
+gix-bitmap.workspace = true #{ version.workspace = true #"^0.2.15", path.workspace = true #"../gix-bitmap" }
+gix-object.workspace = true #{ version.workspace = true #"^0.51.1", path.workspace = true #"../gix-object" }
+gix-validate.workspace = true #{ version.workspace = true #"^0.10.1", path.workspace = true #"../gix-validate" }
+gix-traverse.workspace = true #{ version.workspace = true #"^0.48.0", path.workspace = true #"../gix-traverse" }
+gix-lock.workspace = true #{ version.workspace = true #"^19.0.0", path.workspace = true #"../gix-lock" }
+gix-fs.workspace = true #{ version.workspace = true #"^0.17.0", path.workspace = true #"../gix-fs" }
+gix-utils.workspace = true #{ version.workspace = true #"^0.3.1", path.workspace = true #"../gix-utils" }
+hashbrown.workspace = true #{ git.workspace = true #"https://github.com/meta-introspector/hashbrown", branch.workspace = true #"feature/CRQ-016-nixify" }
+fnv.workspace = true #"1.0.7"
+thiserror.workspace = true #"2.0.17"
+memmap2.workspace = true #"0.9.7"
+filetime.workspace = true #"0.2.15"
+bstr.workspace = true #{ version.workspace = true #"1.12.0", default-features.workspace = true #false }
+serde.workspace = true #{ version.workspace = true #"1.0.114", optional.workspace = true #true, default-features.workspace = true #false, features.workspace = true #[    "derive",] }
+smallvec.workspace = true #"1.15.1"
+itoa.workspace = true #"1.0.3"
+bitflags.workspace = true #"2"
 
-hashbrown = { git = "https://github.com/meta-introspector/hashbrown", branch = "feature/CRQ-016-nixify" }
-fnv = "1.0.7"
-thiserror = "2.0.17"
-memmap2 = "0.9.7"
-filetime = "0.2.15"
-bstr = { version = "1.12.0", default-features = false }
-
-serde = { version = "1.0.114", optional = true, default-features = false, features = [
-    "derive",
-] }
-smallvec = "1.15.1"
-itoa = "1.0.3"
-bitflags = "2"
-
-document-features = { version = "0.2.0", optional = true }
+document-features.workspace = true #{ version = "0.2.0", optional = true }
 
 [target.'cfg(not(windows))'.dependencies]
 rustix = { version = "1.1.2", default-features = false, features = [

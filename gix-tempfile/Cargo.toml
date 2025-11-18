@@ -9,7 +9,7 @@ description = "A tempfile implementation with a global registry to assure cleanu
 authors = ["Sebastian Thiel <sebastian.thiel@icloud.com>"]
 edition = "2021"
 include = ["src/**/*", "LICENSE-*", "README.md"]
-rust-version = "1.82"
+# rust-version = "1.82"
 
 [[example]]
 name = "delete-tempfiles-on-sigterm"
@@ -31,23 +31,28 @@ doctest = false
 test = true
 
 [dependencies]
-gix-fs = { version = "^0.17.0", path = "../gix-fs" }
-parking_lot = "0.12.4"
-dashmap = { version = "6.0.1", optional = true }
-tempfile = "3.23.0"
+gix-fs.workspace = true #{ version.workspace = true #"^0.17.0", path = "../gix-fs" }
+parking_lot.workspace = true #"0.12.4"
+#dashmap = { version = "6.0.1", optional = true }
+dashmap.workspace = true #{ git = "https://github.com/meta-introspector/dashmap", branch = "feature/CRQ-016-nixify" , optional = true }
+tempfile.workspace = true #"3.23.0"
 
-signal-hook = { version = "0.3.18", default-features = false, optional = true }
-signal-hook-registry = { version = "1.4.5", optional = true }
+signal-hook.workspace = true #{ version = "0.3.18", default-features = false, optional = true }
+signal-hook-registry.workspace = true #{ version = "1.4.5", optional = true }
 
-document-features = { version = "0.2.0", optional = true }
+document-features.workspace = true # = { version = "0.2.0", optional = true }
 
 [features]
 default = ["hp-hashmap"]
 ## Support for signal handlers to cleanup tempfiles when a signal is received.
-signals = ["dep:signal-hook", "dep:signal-hook-registry"]
+signals = [
+#"dep:signal-hook", "dep:signal-hook-registry"
+]
 ## Use a high-performance concurrent hashmap implementation for optimal performance with less contention if there are many tempfiles opening at the same time.
 ## It also allows to potentially cleanup more tempfiles in a signal handler as the hashmap can be partially locked.
-hp-hashmap = ["dep:dashmap"]
+hp-hashmap = [
+#"dep:dashmap"
+]
 
 [target.'cfg(not(windows))'.dependencies]
 libc = { version = "0.2.176", default-features = false }

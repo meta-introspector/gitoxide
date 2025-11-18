@@ -16,8 +16,8 @@ imara-diff = { version = "0.1.8" }
 gix-merge = { path = ".." }
 
 # Prevent this from interfering with workspaces
-[workspace]
-members = ["."]
+#[workspace]
+#members = ["."]
 
 [[bin]]
 name = "blob"

@@ -9,12 +9,12 @@ description = "A crate that provides hashtable based data structures optimized t
 authors = ["Pascal Kuthe <pascal.kuthe@semimod.de>"]
 edition = "2021"
 include = ["src/**/*", "LICENSE-*"]
-rust-version = "1.82"
+# rust-version = "1.82"
 
 [lib]
 doctest = false
 
 [dependencies]
-parking_lot = "0.12.4"
-hashbrown = { git = "https://github.com/meta-introspector/hashbrown", branch = "feature/CRQ-016-nixify", default-features = false, features = ["inline-more"] }
-gix-hash = { version = "^0.20.0", path = "../gix-hash" }
+parking_lot.workspace = true #"0.12.4"
+hashbrown.workspace = true # = { git.workspace = true #"https://github.com/meta-introspector/hashbrown", branch = "feature/CRQ-016-nixify", default-features = false, features = ["inline-more"] }
+gix-hash.workspace = true # = { version = "^0.20.0", path = "../gix-hash" }
