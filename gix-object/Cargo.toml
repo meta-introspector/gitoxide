@@ -54,10 +54,7 @@ gix-utils = { version = "^0.3.1", path = "../gix-utils" }
 
 itoa = "1.0.1"
 thiserror = "2.0.17"
-bstr = { version = "1.12.0", default-features = false, features = [
-    "std",
-    "unicode",
-] }
+bstr.workspace = true
 winnow = { version = "0.7.12", features = ["simd"] }
 smallvec = { version = "1.15.1", features = ["write"] }
 serde = { version = "1.0.114", optional = true, default-features = false, features = [

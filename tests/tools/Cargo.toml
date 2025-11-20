@@ -33,7 +33,7 @@ gix-tempfile = { version = "^19.0.0", path = "../../gix-tempfile", default-featu
 
 winnow = { version = "0.7.12", features = ["simd"] }
 fastrand = "2.0.0"
-bstr = { version = "1.12.0", default-features = false }
+bstr.workspace = true
 crc = "3.3.0"
 tempfile = "3.23.0"
 fs_extra = "1.2.0"

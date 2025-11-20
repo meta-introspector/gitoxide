@@ -35,7 +35,7 @@ gix-revwalk = { version = "^0.22.0", path = "../gix-revwalk" }
 gix-commitgraph = { version = "^0.30.1", path = "../gix-commitgraph" }
 gix-trace = { version = "^0.1.15", path = "../gix-trace", optional = true }
 
-bstr = { version = "1.12.0", default-features = false, features = ["std"] }
+bstr.workspace = true
 bitflags = { version = "2", optional = true }
 thiserror = "2.0.17"
 serde = { version = "1.0.114", optional = true, default-features = false, features = ["derive"] }

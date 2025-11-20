@@ -19,7 +19,7 @@ doctest = false
 serde = ["dep:serde", "bstr/serde"]
 
 [dependencies]
-bstr = { version = "1.12.0", default-features = false, features = ["std"] }
+bstr.workspace = true
 serde = { version = "1.0.114", optional = true, default-features = false, features = ["derive"] }
 itoa = "1.0.1"
 jiff = "0.2.15"

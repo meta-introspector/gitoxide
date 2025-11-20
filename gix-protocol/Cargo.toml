@@ -90,10 +90,7 @@ thiserror = "2.0.17"
 serde = { version = "1.0.114", optional = true, default-features = false, features = [
     "derive",
 ] }
-bstr = { version = "1.12.0", default-features = false, features = [
-    "std",
-    "unicode",
-] }
+bstr.workspace = true
 winnow = { version = "0.7.12", features = ["simd"] }
 
 # for async-client

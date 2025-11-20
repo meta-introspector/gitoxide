@@ -26,7 +26,7 @@ gix-packetline = { version = "^0.19.2", path = "../gix-packetline", features = [
 gix-attributes = { version = "^0.28.0", path = "../gix-attributes" }
 
 encoding_rs = "0.8.32"
-bstr = { version = "1.12.0", default-features = false, features = ["std"] }
+bstr.workspace = true
 thiserror = "2.0.17"
 smallvec = "1.15.1"
 

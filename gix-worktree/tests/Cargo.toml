@@ -31,7 +31,7 @@ gix-ignore = { path = "../../gix-ignore" }
 gix-features = { path = "../../gix-features" }
 gix-discover = { path = "../../gix-discover" }
 
-bstr = { version = "1.12.0", default-features = false }
+bstr.workspace = true
 
 gix-testtools = { path = "../../tests/tools" }
 gix-odb = { path = "../../gix-odb" }
