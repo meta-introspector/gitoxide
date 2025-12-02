@@ -87,7 +87,7 @@ pub struct CommitRef<'a> {
     #[cfg_attr(feature = "serde", serde(borrow))]
     pub tree: &'a BStr,
     /// HEX hash of each parent commit. Empty for first commit in repository.
-    pub parents: SmallVec<[&'a BStr; 1]>,
+    pub parents: SmallVec<&'a BStr, 1>,
     /// The raw author header value as encountered during parsing.
     ///
     /// Use the [`author()`](CommitRef::author()) method to obtain a parsed version of it.
@@ -121,7 +121,7 @@ pub struct Commit {
     /// The hash of recorded working tree state.
     pub tree: gix_hash::ObjectId,
     /// Hash of each parent commit. Empty for the first commit in repository.
-    pub parents: SmallVec<[gix_hash::ObjectId; 1]>,
+    pub parents: SmallVec<gix_hash::ObjectId, 1>,
     /// Who wrote this commit.
     pub author: gix_actor::Signature,
     /// Who committed this commit.

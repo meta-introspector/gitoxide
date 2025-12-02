@@ -2,14 +2,14 @@ lints.workspace = true
 
 [package]
 name = "gix-actor"
-version = "0.36.0"
+#workspace=true
 description = "A way to identify git actors"
 authors = ["Sebastian Thiel <sebastian.thiel@icloud.com>"]
 repository = "https://github.com/GitoxideLabs/gitoxide"
 license = "MIT OR Apache-2.0"
 edition = "2021"
 include = ["src/**/*", "LICENSE-*"]
-rust-version = "1.82"
+rust-workspace=true
 
 [lib]
 doctest = false
@@ -19,26 +19,26 @@ doctest = false
 serde = ["dep:serde", "bstr/serde", "gix-date/serde"]
 
 [dependencies]
-gix-date = { version = "^0.11.0", path = "../gix-date" }
-gix-utils = { version = "^0.3.1", path = "../gix-utils" }
+gix-date = { workspace=true }
+gix-utils = { workspace=true }
 
 thiserror = "2.0.17"
-bstr = { version = "1.12.0", default-features = false, features = [
+bstr = { workspace=true, features = [
     "std",
     "unicode",
 ] }
-winnow = { version = "0.7.14", features = ["simd"] }
+winnow = { workspace=true, features = ["simd"] }
 itoa = "1.0.1"
-serde = { version = "1.0.114", optional = true, default-features = false, features = [
+serde = { workspace=true, optional = true, features = [
     "derive",
 ] }
 
-document-features = { version = "0.2.0", optional = true }
+document-features = { workspace=true, optional = true }
 
 [dev-dependencies]
 pretty_assertions = "1.0.0"
-gix-testtools = { path = "../tests/tools" }
-gix-hash = { path = "../gix-hash" }
+gix-testtools = {  workspace=true}
+gix-hash = {  workspace=true}
 
 [package.metadata.docs.rs]
 all-features = true

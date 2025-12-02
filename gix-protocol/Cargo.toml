@@ -2,14 +2,14 @@ lints.workspace = true
 
 [package]
 name = "gix-protocol"
-version = "0.53.0"
+
 repository = "https://github.com/GitoxideLabs/gitoxide"
 license = "MIT OR Apache-2.0"
 description = "A crate of the gitoxide project for implementing git protocols"
 authors = ["Sebastian Thiel <sebastian.thiel@icloud.com>"]
 edition = "2021"
 include = ["src/**/*", "LICENSE-*", "!**/tests/**/*"]
-rust-version = "1.82"
+rust-workspace=true
 
 [lib]
 doctest = false
@@ -59,54 +59,54 @@ serde = ["dep:serde", "bstr/serde", "gix-transport/serde", "gix-hash/serde", "gi
 
 [[test]]
 name = "blocking"
-path = "tests/blocking-protocol.rs"
+
 required-features = ["blocking-client"]
 
 [[test]]
 name = "async"
-path = "tests/async-protocol.rs"
+
 required-features = ["async-client"]
 
 [dependencies]
-gix-features = { version = "^0.44.1", path = "../gix-features", features = [
+gix-features = { workspace=true, features = [
     "progress",
 ] }
-gix-transport = { version = "^0.50.0", path = "../gix-transport" }
-gix-hash = { version = "^0.20.1", path = "../gix-hash" }
-gix-shallow = { version = "^0.6.0", path = "../gix-shallow" }
-gix-date = { version = "^0.11.0", path = "../gix-date" }
-gix-utils = { version = "^0.3.1", path = "../gix-utils" }
-gix-ref = { version = "^0.55.0", path = "../gix-ref" }
+gix-transport = { workspace=true }
+gix-hash = { workspace=true }
+gix-shallow = { workspace=true }
+gix-date = { workspace=true }
+gix-utils = { workspace=true }
+gix-ref = { workspace=true }
 
-gix-trace = { version = "^0.1.15", path = "../gix-trace", optional = true }
-gix-negotiate = { version = "^0.23.0", path = "../gix-negotiate", optional = true }
-gix-object = { version = "^0.52.0", path = "../gix-object", optional = true }
-gix-revwalk = { version = "^0.23.0", path = "../gix-revwalk", optional = true }
-gix-credentials = { version = "^0.32.0", path = "../gix-credentials", optional = true }
-gix-refspec = { version = "^0.33.0", path = "../gix-refspec", optional = true }
-gix-lock = { version = "^19.0.0", path = "../gix-lock", optional = true }
+gix-trace = { workspace=true, optional = true }
+gix-negotiate = { workspace=true, optional = true }
+gix-object = { workspace=true, optional = true }
+gix-revwalk = { workspace=true, optional = true }
+gix-credentials = { workspace=true, optional = true }
+gix-refspec = { workspace=true, optional = true }
+gix-lock = { workspace=true, optional = true }
 
 thiserror = "2.0.17"
-serde = { version = "1.0.114", optional = true, default-features = false, features = [
+serde = { workspace=true, optional = true, features = [
     "derive",
 ] }
-bstr = { version = "1.12.0", default-features = false, features = [
+bstr = { workspace=true, features = [
     "std",
     "unicode",
 ] }
-winnow = { version = "0.7.14", features = ["simd"] }
+winnow = { workspace=true, features = ["simd"] }
 
 # for async-client
-async-trait = { version = "0.1.51", optional = true }
-futures-io = { version = "0.3.16", optional = true }
-futures-lite = { version = "2.1.0", optional = true }
+async-trait = { workspace=true, optional = true }
+futures-io = { workspace=true, optional = true }
+futures-lite = { workspace=true, optional = true }
 maybe-async = "0.2.6"
 
-document-features = { version = "0.2.0", optional = true }
+document-features = { workspace=true, optional = true }
 
 [dev-dependencies]
-async-std = { version = "1.9.0", features = ["attributes"] }
-gix-packetline = { path = "../gix-packetline", version = "^0.20.0" }
+async-std = { workspace=true, features = ["attributes"] }
+gix-packetline = {workspace=true }
 
 [package.metadata.docs.rs]
 features = ["blocking-client", "document-features", "serde"]

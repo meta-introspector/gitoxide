@@ -43,7 +43,7 @@ pub trait WriteTo {
     fn size(&self) -> u64;
 
     /// Returns a loose object header based on the object's data
-    fn loose_header(&self) -> smallvec::SmallVec<[u8; 28]> {
+    fn loose_header(&self) -> smallvec::SmallVec<u8, 28> {
         crate::encode::loose_header(self.kind(), self.size())
     }
 }

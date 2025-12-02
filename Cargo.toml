@@ -9,23 +9,23 @@ edition = "2021"
 license = "MIT OR Apache-2.0"
 #workspace=true
 rust-workspace=true
-default-run = "gix"
+#default-run = "gix"
 include = ["src/**/*", "/build.rs", "LICENSE-*", "README.md"]
 resolver = "2"
 
-[[bin]]
-name = "ein"
+#[[bin]]
+#name = "ein"
 
-doc = false
-test = false
-doctest = false
+# doc = false
+# test = false
+# doctest = false
 
-[[bin]]
-name = "gix"
+# [[bin]]
+## name = "gix"
 
-doc = false
-test = false
-doctest = false
+# doc = false
+# test = false
+# doctest = false
 
 [features]
 default = ["max"]
@@ -49,7 +49,9 @@ max = ["max-control", "fast", "gitoxide-core-tools-query", "gitoxide-core-tools-
 max-pure = ["max-control", "http-client-reqwest", "gitoxide-core-blocking-client"]
 
 ## Like `max`, but with more control for configuration. See the *Package Maintainers* headline for more information.
-max-control = ["tracing", "fast", "pretty-cli", "gitoxide-core-tools", "prodash-render-line", "prodash-render-tui", "prodash/render-line-autoconfigure", "gix/revparse-regex"]
+max-control = ["tracing", "fast", "pretty-cli", "gitoxide-core-tools", "prodash-render-line", "prodash-render-tui", "prodash/render-line-autoconfigure",
+#"gix/revparse-regex"
+]
 
 ## All the good stuff, with less fanciness for smaller binaries.
 ##
@@ -85,13 +87,17 @@ lean-async = ["fast", "tracing", "pretty-cli", "gitoxide-core-tools", "gitoxide-
 
 ## Makes the crate execute as fast as possible by supporting parallel computation of otherwise long-running functions.
 ## If disabled, the binary will be visibly smaller.
-fast = ["gix/max-performance", "gix/comfort"]
+fast = [
+#"gix/max-performance", "gix/comfort"
+]
 
 ## Deprecated: identical to `fast`, as the fastest zlib backend is now the pure-Rust zlib-rs.
 fast-safe = ["fast"]
 
 ## Enable tracing in `gitoxide-core`.
-tracing = ["dep:tracing-forest", "dep:tracing-subscriber", "dep:tracing", "gix-features/tracing", "gix-features/tracing-detail"]
+tracing = ["dep:tracing-forest", "dep:tracing-subscriber", "dep:tracing",
+"gix-features/tracing", "gix-features/tracing-detail
+"]
 
 ## Use `clap` 3.0 to build the prettiest, best documented and most user-friendly CLI at the expense of binary size.
 ## Provides a terminal user interface for detailed and exhaustive progress.
@@ -103,10 +109,14 @@ pretty-cli = ["gitoxide-core/serde", "prodash/progress-tree", "prodash/progress-
 prodash-render-line-crossterm = ["prodash-render-line", "prodash/render-line-crossterm", "prodash/signal-hook", "is-terminal", "crosstermion"]
 
 ## Progress reporting with a TUI, can then be enabled with the `--progress` flag.
-prodash-render-tui = ["prodash/render-tui", "prodash/render-tui-crossterm", "gix/progress-tree", "futures-lite"]
+prodash-render-tui = ["prodash/render-tui", "prodash/render-tui-crossterm",
+#"gix/progress-tree",
+"futures-lite"]
 
 ## Progress reporting by visually drawing lines into the terminal without switching to an alternate window.
-prodash-render-line = ["prodash/render-line", "prodash-render-line-crossterm", "gix/progress-tree"]
+prodash-render-line = ["prodash/render-line", "prodash-render-line-crossterm",
+#"gix/progress-tree"
+]
 
 ## Prints statistical information to inform about cache efficiency when those are dropped.
 ## Use this as a way to understand if bigger caches actually produce greater yields.
@@ -137,11 +147,17 @@ gitoxide-core-tools-clean = ["gitoxide-core/clean"]
 ## Use blocking client networking.
 gitoxide-core-blocking-client = ["gitoxide-core/blocking-client"]
 ## Support synchronous 'http' and 'https' transports (e.g. for clone, fetch and push) using **curl**.
-http-client-curl = ["gix/blocking-http-transport-curl"]
+http-client-curl = [
+#"gix/blocking-http-transport-curl"
+]
 ## Implies `http-client-curl` and configures `curl` to use the `rust-tls` backend.
-http-client-curl-rustls = ["gix/blocking-http-transport-curl-rustls"]
+http-client-curl-rustls = [
+#"gix/blocking-http-transport-curl-rustls"
+]
 ## Support synchronous 'http' and 'https' transports (e.g. for clone, fetch and push) using **reqwest**.
-http-client-reqwest = ["gix/blocking-http-transport-reqwest-rust-tls"]
+http-client-reqwest = [
+#"gix/blocking-http-transport-reqwest-rust-tls"
+]
 
 #! #### Async
 #!

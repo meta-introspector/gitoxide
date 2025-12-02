@@ -119,8 +119,8 @@ pub mod resource {
         /// on the other side.
         ///
         /// Suitable to create tokens using [`imara_diff::intern::InternedInput`].
-        pub fn intern_source(&self) -> imara_diff::sources::ByteLines<'a, true> {
-            crate::blob::sources::byte_lines_with_terminator(self.data.as_slice().unwrap_or_default())
+        pub fn intern_source(&self) -> imara_diff::sources::ByteLines<'a> {
+            crate::blob::sources::byte_lines(self.data.as_slice().unwrap_or_default())
         }
 
         /// Produce an iterator over lines, but remove LF or CRLF.
@@ -129,7 +129,7 @@ pub mod resource {
         /// with a newline before the change.
         ///
         /// Suitable to create tokens using [`imara_diff::intern::InternedInput`].
-        pub fn intern_source_strip_newline_separators(&self) -> imara_diff::sources::ByteLines<'a, false> {
+        pub fn intern_source_strip_newline_separators(&self) -> imara_diff::sources::ByteLines<'a> {
             crate::blob::sources::byte_lines(self.data.as_slice().unwrap_or_default())
         }
     }
@@ -270,8 +270,8 @@ pub mod prepare_diff {
         /// Note that newline separators will be removed to improve diff quality
         /// at the end of files that didn't have a newline, but had lines added
         /// past the end.
-        pub fn interned_input(&self) -> imara_diff::intern::InternedInput<&'a [u8]> {
-            crate::blob::intern::InternedInput::new(
+        pub fn interned_input(&self) -> imara_diff::InternedInput<&'a [u8]> {
+            imara_diff::InternedInput::new(
                 self.old.intern_source_strip_newline_separators(),
                 self.new.intern_source_strip_newline_separators(),
             )

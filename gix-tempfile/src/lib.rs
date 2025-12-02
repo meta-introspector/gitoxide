@@ -111,27 +111,7 @@ use crate::handle::{Closed, Writable};
 pub mod registry;
 
 static NEXT_MAP_INDEX: AtomicUsize = AtomicUsize::new(0);
-static REGISTRY: LazyLock<HashMap<usize, Option<ForksafeTempfile>>> = LazyLock::new(|| {
-    #[cfg(feature = "signals")]
-    if signal::handler::MODE.load(std::sync::atomic::Ordering::SeqCst) != signal::handler::Mode::None as usize {
-        for sig in signal_hook::consts::TERM_SIGNALS {
-            // SAFETY: handlers are considered unsafe because a lot can go wrong. See `cleanup_tempfiles()` for details on safety.
-            #[allow(unsafe_code)]
-            unsafe {
-                #[cfg(not(windows))]
-                {
-                    signal_hook_registry::register_sigaction(*sig, signal::handler::cleanup_tempfiles_nix)
-                }
-                #[cfg(windows)]
-                {
-                    signal_hook::low_level::register(*sig, signal::handler::cleanup_tempfiles_windows)
-                }
-            }
-            .expect("signals can always be installed");
-        }
-    }
-    HashMap::default()
-});
+static REGISTRY: LazyLock<HashMap<usize, Option<ForksafeTempfile>>> = LazyLock::new(HashMap::default);
 
 /// A type expressing the ways we can deal with directories containing a tempfile.
 #[derive(Debug, Clone, Copy, Ord, PartialOrd, Eq, PartialEq)]

@@ -1,41 +1,34 @@
 lints.workspace = true
 
 [package]
-name = "gix-attributes"
+name = "gix-glob"
 
 repository = "https://github.com/GitoxideLabs/gitoxide"
 license = "MIT OR Apache-2.0"
-description = "A crate of the gitoxide project dealing .gitattributes files"
+description = "A crate of the gitoxide project dealing with pattern matching"
 authors = ["Sebastian Thiel <sebastian.thiel@icloud.com>"]
 edition = "2021"
-include = ["src/**/*", "LICENSE-*"]
 rust-workspace=true
+include = ["src/**/*", "LICENSE-*"]
 
 [lib]
 doctest = false
 
 [features]
 ## Data structures implement `serde::Serialize` and `serde::Deserialize`.
-serde = ["dep:serde", "bstr/serde", "gix-glob/serde", "kstring/serde"]
+serde = ["dep:serde", "bstr/serde", "bitflags/serde"]
 
 [dependencies]
 gix-path = { workspace=true }
-gix-quote = { workspace=true }
-gix-glob = { workspace=true }
-gix-trace = { workspace=true }
-
-bstr = { workspace=true, features = ["std", "unicode"] }
-smallvec = { workspace = true }
-kstring = "2.0.0"
-unicode-bom = { workspace=true }
-thiserror = "2.0.17"
+gix-features = { workspace=true }
+bstr = { workspace=true, features = ["std"] }
+bitflags = "2"
 serde = { workspace=true, optional = true, features = ["derive"] }
 
 document-features = { workspace=true, optional = true }
 
 [dev-dependencies]
-gix-testtools = { workspace=true }
-gix-fs = {  workspace=true}
+gix-testtools = {  }
 
 [package.metadata.docs.rs]
 all-features = true

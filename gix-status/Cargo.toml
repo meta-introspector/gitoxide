@@ -2,14 +2,14 @@ lints.workspace = true
 
 [package]
 name = "gix-status"
-version = "0.22.0"
+
 repository = "https://github.com/GitoxideLabs/gitoxide"
 license = "MIT OR Apache-2.0"
 description = "A crate of the gitoxide project dealing with 'git status'-like functionality"
 authors = ["Sebastian Thiel <sebastian.thiel@icloud.com>", "Pascal Kuthe <pascal.kuthe@semimod.de>"]
 edition = "2021"
 include = ["src/**/*", "LICENSE-*"]
-rust-version = "1.82"
+rust-workspace=true
 autotests = false
 
 [lib]
@@ -20,24 +20,24 @@ doctest = false
 worktree-rewrites = ["dep:gix-dir", "dep:gix-diff"]
 
 [dependencies]
-gix-index = { version = "^0.43.0", path = "../gix-index" }
-gix-fs = { version = "^0.17.0", path = "../gix-fs" }
-gix-hash = { version = "^0.20.1", path = "../gix-hash" }
-gix-object = { version = "^0.52.0", path = "../gix-object" }
-gix-path = { version = "^0.10.22", path = "../gix-path" }
-gix-features = { version = "^0.44.1", path = "../gix-features", features = ["progress"] }
-gix-filter = { version = "^0.22.0", path = "../gix-filter" }
-gix-worktree = { version = "^0.44.0", path = "../gix-worktree", default-features = false, features = ["attributes"] }
-gix-pathspec = { version = "^0.13.0", path = "../gix-pathspec" }
+gix-index = { workspace=true }
+gix-fs = { workspace=true }
+gix-hash = { workspace=true }
+gix-object = { workspace=true }
+gix-path = { workspace=true }
+gix-features = { workspace=true, features = ["progress"] }
+gix-filter = { workspace=true }
+gix-worktree = { workspace=true, features = ["attributes"] }
+gix-pathspec = { workspace=true }
 
-gix-dir = { version = "^0.17.0", path = "../gix-dir", optional = true }
-gix-diff = { version = "^0.55.0", path = "../gix-diff", default-features = false, features = ["blob"], optional = true }
+gix-dir = { workspace=true, optional = true }
+gix-diff = { workspace=true, features = ["blob"], optional = true }
 
 thiserror = "2.0.17"
 filetime = "0.2.15"
-bstr = { version = "1.12.0", default-features = false }
+bstr = { workspace=true }
 
-document-features = { version = "0.2.0", optional = true }
+document-features = { workspace=true, optional = true }
 
 [target.'cfg(not(target_has_atomic = "64"))'.dependencies]
 portable-atomic = "1"

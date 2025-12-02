@@ -11,7 +11,7 @@ mod refmap;
 pub(crate) use refmap::RefMap;
 
 /// A typically sized list of attributes.
-pub type Assignments = SmallVec<[TrackedAssignment; AVERAGE_NUM_ATTRS]>;
+pub type Assignments = SmallVec<TrackedAssignment, AVERAGE_NUM_ATTRS>;
 
 /// A value of a [pattern mapping][gix_glob::search::pattern::Mapping],
 /// which is either a macro definition or a set of attributes.
@@ -97,9 +97,9 @@ pub struct Outcome {
     /// This list needs to be up-to-date with the search group so all possible attribute names are known.
     matches_by_id: Vec<Slot>,
     /// A stack of attributes to use for processing attributes of matched patterns and for resolving their macros.
-    attrs_stack: SmallVec<[(AttributeId, Assignment, Option<AttributeId>); 8]>,
+    attrs_stack: SmallVec<(AttributeId, Assignment, Option<AttributeId>), 8>,
     /// A set of attributes we should limit ourselves to, or empty if we should fill in all attributes, made of
-    selected: SmallVec<[(KString, Option<AttributeId>); AVERAGE_NUM_ATTRS]>,
+    selected: SmallVec<(KString, Option<AttributeId>), AVERAGE_NUM_ATTRS>,
     /// storage for all patterns we have matched so far (in order to avoid referencing them, we copy them, but only once).
     patterns: RefMap<gix_glob::Pattern>,
     /// storage for all assignments we have matched so far (in order to avoid referencing them, we copy them, but only once).

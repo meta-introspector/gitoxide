@@ -2,7 +2,7 @@ lints.workspace = true
 
 [package]
 name = "gix-commitgraph"
-version = "0.30.1"
+
 repository = "https://github.com/GitoxideLabs/gitoxide"
 documentation = "https://git-scm.com/docs/commit-graph"
 license = "MIT OR Apache-2.0"
@@ -10,7 +10,7 @@ description = "Read-only access to the git commitgraph file format"
 authors = ["Conor Davis <gitoxide@conor.fastmail.fm>", "Sebastian Thiel <sebastian.thiel@icloud.com>"]
 edition = "2021"
 include = ["src/**/*", "LICENSE-*"]
-rust-version = "1.82"
+rust-workspace=true
 
 [lib]
 doctest = false
@@ -20,19 +20,19 @@ doctest = false
 serde = ["dep:serde", "gix-hash/serde", "bstr/serde"]
 
 [dependencies]
-gix-hash = { version = "^0.20.1", path = "../gix-hash" }
-gix-chunk = { version = "^0.4.12", path = "../gix-chunk" }
+gix-hash = { workspace=true }
+gix-chunk = { workspace=true }
 
-bstr = { version = "1.12.0", default-features = false, features = ["std"] }
+bstr = { workspace=true, features = ["std"] }
 memmap2 = "0.9.7"
-serde = { version = "1.0.114", optional = true, default-features = false, features = ["derive"] }
+serde = { workspace=true, optional = true, features = ["derive"] }
 thiserror = "2.0.17"
 
-document-features = { version = "0.2.0", optional = true }
+document-features = { workspace=true, optional = true }
 
 [dev-dependencies]
-gix-testtools = { path = "../tests/tools" }
-gix-date = { path = "../gix-date" }
+gix-testtools = { workspace=true }
+gix-date = {  workspace=true}
 
 [package.metadata.docs.rs]
 all-features = true

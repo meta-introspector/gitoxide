@@ -1,6 +1,6 @@
 use bstr::{BString, ByteSlice, ByteVec};
-use imara_diff::{intern, Sink};
-use intern::{InternedInput, Interner, Token};
+use imara_diff::{InternedInput, Interner, Token};
+
 use std::fmt::Write;
 use std::{hash::Hash, ops::Range};
 
@@ -127,61 +127,7 @@ where
     }
 }
 
-impl<T, D> Sink for UnifiedDiff<'_, T, D>
-where
-    T: Hash + Eq + AsRef<[u8]>,
-    D: ConsumeHunk,
-{
-    type Out = std::io::Result<D::Out>;
 
-    fn process_change(&mut self, before: Range<u32>, after: Range<u32>) {
-        if self.err.is_some() {
-            return;
-        }
-        let start_next_hunk = self
-            .ctx_pos
-            .is_some_and(|ctx_pos| before.start - ctx_pos > 2 * self.ctx_size);
-        if start_next_hunk {
-            if let Err(err) = self.flush_accumulated_hunk() {
-                self.err = Some(err);
-                return;
-            }
-            let ctx_pos = before.start - self.ctx_size;
-            self.ctx_pos = Some(ctx_pos);
-            self.before_hunk_start = ctx_pos;
-            self.after_hunk_start = after.start - self.ctx_size;
-        }
-        let ctx_pos = match self.ctx_pos {
-            None => {
-                // TODO: can this be made so the code above does the job?
-                let ctx_pos = before.start.saturating_sub(self.ctx_size);
-                self.before_hunk_start = ctx_pos;
-                self.after_hunk_start = after.start.saturating_sub(self.ctx_size);
-                ctx_pos
-            }
-            Some(pos) => pos,
-        };
-        self.print_context_and_update_pos(ctx_pos..before.start, before.end);
-        self.before_hunk_len += before.end - before.start;
-        self.after_hunk_len += after.end - after.start;
-
-        self.print_tokens(
-            &self.before[before.start as usize..before.end as usize],
-            DiffLineKind::Remove,
-        );
-        self.print_tokens(&self.after[after.start as usize..after.end as usize], DiffLineKind::Add);
-    }
-
-    fn finish(mut self) -> Self::Out {
-        if let Err(err) = self.flush_accumulated_hunk() {
-            self.err = Some(err);
-        }
-        if let Some(err) = self.err {
-            return Err(err);
-        }
-        Ok(self.delegate.finish())
-    }
-}
 
 /// An implementation that fails if the input isn't UTF-8.
 impl<D> ConsumeHunk for ConsumeBinaryHunk<'_, D>

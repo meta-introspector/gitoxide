@@ -4,7 +4,7 @@ lints.workspace = true
 name = "gitoxide-core"
 description = "The library implementing all capabilities of the gitoxide CLI"
 repository = "https://github.com/GitoxideLabs/gitoxide"
-version = "0.50.0"
+
 authors = ["Sebastian Thiel <sebastian.thiel@icloud.com>"]
 license = "MIT OR Apache-2.0"
 edition = "2021"
@@ -49,51 +49,51 @@ serde = ["gix/serde", "dep:serde_json", "dep:serde", "bytesize/serde"]
 
 [dependencies]
 # deselect everything else (like "performance") as this should be controllable by the parent application.
-gix = { version = "^0.75.0", path = "../gix", default-features = false, features = ["merge", "blob-diff", "blame", "revision", "mailmap", "excludes", "attributes", "worktree-mutation", "credentials", "interrupt", "status", "dirwalk"] }
-gix-pack-for-configuration-only = { package = "gix-pack", version = "^0.62.0", path = "../gix-pack", default-features = false, features = ["pack-cache-lru-dynamic", "pack-cache-lru-static", "generate", "streaming-input"] }
-gix-transport-configuration-only = { package = "gix-transport", version = "^0.50.0", path = "../gix-transport", default-features = false }
-gix-archive-for-configuration-only = { package = "gix-archive", version = "^0.24.0", path = "../gix-archive", optional = true, features = ["tar", "tar_gz"] }
-gix-status = { version = "^0.22.0", path = "../gix-status" }
-gix-fsck = { version = "^0.14.0", path = "../gix-fsck" }
-serde = { version = "1.0.114", optional = true, default-features = false, features = ["derive"] }
+gix = { workspace=true, features = ["merge", "blob-diff", "blame", "revision", "mailmap", "excludes", "attributes", "worktree-mutation", "credentials", "interrupt", "status", "dirwalk"] }
+gix-pack-for-configuration-only = { package = "gix-pack", workspace=true, features = ["pack-cache-lru-dynamic", "pack-cache-lru-static", "generate", "streaming-input"] }
+gix-transport-configuration-only = { package = "gix-transport", workspace=true }
+gix-archive-for-configuration-only = { package = "gix-archive", workspace=true, optional = true, features = ["tar", "tar_gz"] }
+gix-status = { workspace=true }
+gix-fsck = { workspace=true }
+serde = { workspace=true, optional = true, features = ["derive"] }
 anyhow = "1.0.100"
 thiserror = "2.0.17"
 bytesize = "2.3.1"
 tempfile = "3.23.0"
 
 # for async-client
-async-trait = { version = "0.1.51", optional = true }
-async-net = { version = "2.0", optional = true }
-futures-lite = { version = "2.1.0", optional = true }
-async-io = { version = "2.6", optional = true }
-futures-io = { version = "0.3.16", optional = true }
-blocking = { version = "1.6.2", optional = true }
+async-trait = { workspace=true, optional = true }
+async-net = { workspace=true, optional = true }
+futures-lite = { workspace=true, optional = true }
+async-io = { workspace=true, optional = true }
+futures-io = { workspace=true, optional = true }
+blocking = { workspace=true, optional = true }
 
 # for 'organize' functionality
-gix-url = { version = "^0.33.2", path = "../gix-url", optional = true }
-jwalk = { version = "0.8.0", optional = true }
+gix-url = { workspace=true, optional = true }
+jwalk = { workspace=true, optional = true }
 
 # for 'hours'
-fs-err = { version = "3.1.2", optional = true }
-crossbeam-channel = { version = "0.5.15", optional = true }
-smallvec = { version = "1.15.1", optional = true }
+fs-err = { workspace=true, optional = true }
+crossbeam-channel = { workspace=true, optional = true }
+smallvec = { workspace=true, optional = true }
 
 # for 'query' and 'corpus'
-rusqlite = { version = "0.37.0", optional = true, features = ["bundled"] }
+rusqlite = { workspace=true, optional = true, features = ["bundled"] }
 
 # for 'corpus'
-parking_lot = { version = "0.12.4", optional = true }
-sysinfo = { version = "0.37.2", optional = true, default-features = false, features = ["system"] }
-serde_json = { version = "1.0.145", optional = true }
-tracing-forest = { version = "0.2.0", features = ["serde"], optional = true }
-tracing-subscriber = { version = "0.3.20", optional = true }
-tracing = { version = "0.1.37", optional = true }
+parking_lot = { workspace=true, optional = true }
+sysinfo = { workspace=true, optional = true, features = ["system"] }
+serde_json = { workspace=true, optional = true }
+tracing-forest = { workspace=true, features = ["serde"], optional = true }
+tracing-subscriber = { workspace=true, optional = true }
+tracing = { workspace=true, optional = true }
 
 # for svg graph output
 layout-rs = "0.1.3"
 open = "5.0.0"
 
-document-features = { version = "0.2.0", optional = true }
+document-features = { workspace=true, optional = true }
 
 [package.metadata.docs.rs]
 features = ["document-features", "blocking-client", "organize", "estimate-hours", "serde"]

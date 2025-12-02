@@ -2,14 +2,14 @@ lints.workspace = true
 
 [package]
 name = "gix-ref"
-version = "0.55.0"
+#workspace=true
 repository = "https://github.com/GitoxideLabs/gitoxide"
 license = "MIT OR Apache-2.0"
 description = "A crate to handle git references"
 authors = ["Sebastian Thiel <sebastian.thiel@icloud.com>"]
 edition = "2021"
 include = ["src/**/*", "LICENSE-*"]
-rust-version = "1.82"
+rust-workspace=true
 autotests = false
 
 [lib]
@@ -21,29 +21,29 @@ test = true
 serde = ["dep:serde", "gix-hash/serde", "gix-actor/serde", "gix-object/serde"]
 
 [dependencies]
-gix-features = { version = "^0.44.1", path = "../gix-features", features = ["walkdir"] }
-gix-fs = { version = "^0.17.0", path = "../gix-fs" }
-gix-path = { version = "^0.10.22", path = "../gix-path" }
-gix-hash = { version = "^0.20.1", path = "../gix-hash" }
-gix-object = { version = "^0.52.0", path = "../gix-object" }
-gix-utils = { version = "^0.3.1", path = "../gix-utils" }
-gix-validate = { version = "^0.10.1", path = "../gix-validate" }
-gix-actor = { version = "^0.36.0", path = "../gix-actor" }
-gix-lock = { version = "^19.0.0", path = "../gix-lock" }
-gix-tempfile = { version = "^19.0.0", default-features = false, path = "../gix-tempfile" }
+gix-features = { workspace=true, features = ["walkdir"] }
+gix-fs = { workspace=true }
+gix-path = { workspace=true }
+gix-hash = { workspace=true }
+gix-object = { workspace=true }
+gix-utils = { workspace=true }
+gix-validate = { workspace=true }
+gix-actor = { workspace=true }
+gix-lock = { workspace=true }
+gix-tempfile = { workspace=true }
 
 thiserror = "2.0.17"
-winnow = { version = "0.7.14", features = ["simd"] }
-serde = { version = "1.0.114", optional = true, default-features = false, features = ["derive"] }
+winnow = { workspace=true, features = ["simd"] }
+serde = { workspace=true, optional = true, features = ["derive"] }
 
 # packed refs
 memmap2 = "0.9.7"
 
-document-features = { version = "0.2.1", optional = true }
+document-features = { workspace=true, optional = true }
 
 [dev-dependencies]
-gix-testtools = { path = "../tests/tools" }
-gix-date = { path = "../gix-date" }
+gix-testtools = { workspace=true }
+gix-date = { workspace=true }
 
 [package.metadata.docs.rs]
 features = ["document-features", "serde"]

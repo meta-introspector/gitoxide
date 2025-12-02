@@ -8,6 +8,8 @@
 use std::ops::Range;
 
 use bstr::{BStr, ByteSlice};
+use imara_diff;
+use imara_diff::Diff;
 use gix_object::tree::{EntryKind, EntryMode};
 
 use crate::{
@@ -751,25 +753,22 @@ fn find_match<'a, T: Change>(
             match prep.operation {
                 Operation::InternalDiff { algorithm } => {
                     let tokens =
-                        crate::blob::intern::InternedInput::new(prep.old.intern_source(), prep.new.intern_source());
-                    let counts = crate::blob::diff(
-                        algorithm,
-                        &tokens,
-                        crate::blob::sink::Counter::new(diff::Statistics {
-                            removed_bytes: 0,
-                            input: &tokens,
-                        }),
-                    );
+                        imara_diff::InternedInput::new(prep.old.intern_source(), prep.new.intern_source());
+                    let diff_result = imara_diff::Diff::compute(algorithm, &tokens);
+
+                    let removals_count = diff_result.count_removals();
+                    let insertions_count = diff_result.count_additions();
+
                     let old_data_len = prep.old.data.as_slice().unwrap_or_default().len();
                     let new_data_len = prep.new.data.as_slice().unwrap_or_default().len();
-                    let similarity = (old_data_len - counts.wrapped) as f32 / old_data_len.max(new_data_len) as f32;
+                    let similarity = (old_data_len - removals_count as usize) as f32 / old_data_len.max(new_data_len) as f32;
                     if similarity >= percentage {
                         return Ok(Some((
                             can_idx,
                             src,
                             DiffLineStats {
-                                removals: counts.removals,
-                                insertions: counts.insertions,
+                                removals: removals_count,
+                                insertions: insertions_count,
                                 before: tokens.before.len().try_into().expect("interner handles only u32"),
                                 after: tokens.after.len().try_into().expect("interner handles only u32"),
                                 similarity,
@@ -790,29 +789,7 @@ fn find_match<'a, T: Change>(
     Ok(None)
 }
 
-mod diff {
-    use std::ops::Range;
 
-    pub struct Statistics<'a, 'data> {
-        pub removed_bytes: usize,
-        pub input: &'a crate::blob::intern::InternedInput<&'data [u8]>,
-    }
-
-    impl crate::blob::Sink for Statistics<'_, '_> {
-        type Out = usize;
-
-        fn process_change(&mut self, before: Range<u32>, _after: Range<u32>) {
-            self.removed_bytes += self.input.before[before.start as usize..before.end as usize]
-                .iter()
-                .map(|token| self.input.interner[*token].len())
-                .sum::<usize>();
-        }
-
-        fn finish(self) -> Self::Out {
-            self.removed_bytes
-        }
-    }
-}
 
 #[cfg(test)]
 mod estimate_involved_items {

@@ -2,13 +2,13 @@ lints.workspace = true
 
 [package]
 name = "gix-fs"
-version = "0.17.0"
+#workspace=true
 repository = "https://github.com/GitoxideLabs/gitoxide"
 license = "MIT OR Apache-2.0"
 description = "A crate providing file system specific utilities to `gitoxide`"
 authors = ["Sebastian Thiel <sebastian.thiel@icloud.com>"]
 edition = "2021"
-rust-version = "1.82"
+rust-workspace=true
 include = ["src/**/*", "LICENSE-*"]
 
 [lib]
@@ -20,14 +20,14 @@ serde = ["dep:serde"]
 
 [dependencies]
 bstr = "1.12.0"
-gix-path = { version = "^0.10.21", path = "../gix-path" }
-gix-features = { version = "^0.44.0", path = "../gix-features", features = ["fs-read-dir"] }
-gix-utils = { version = "^0.3.1", path = "../gix-utils" }
+gix-path = { workspace=true }
+gix-features = { workspace=true, features = ["fs-read-dir"] }
+gix-utils = { workspace=true }
 thiserror = "2.0.17"
-serde = { version = "1.0.114", optional = true, default-features = false, features = ["std", "derive"] }
+serde = { workspace=true, optional = true, features = ["std", "derive"] }
 
 # For `Capabilities` to assure parallel operation works.
-fastrand = { version = "2.1.0", default-features = false, features = ["std"] }
+fastrand = { workspace=true, features = ["std"] }
 
 [dev-dependencies]
 crossbeam-channel = "0.5.15"

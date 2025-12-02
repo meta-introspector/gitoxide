@@ -2,22 +2,22 @@ lints.workspace = true
 
 [package]
 name = "gix-lock"
-version = "19.0.0"
+#workspace=true
 repository = "https://github.com/GitoxideLabs/gitoxide"
 license = "MIT OR Apache-2.0"
 description = "A git-style lock-file implementation"
 authors = ["Sebastian Thiel <sebastian.thiel@icloud.com>"]
 edition = "2021"
 include = ["src/**/*", "LICENSE-*", "README.md"]
-rust-version = "1.82"
+rust-workspace=true
 
 [lib]
 doctest = false
 test = true
 
 [dependencies]
-gix-utils = { version = "^0.3.1", default-features = false, path = "../gix-utils" }
-gix-tempfile = { version = "^19.0.0", default-features = false, path = "../gix-tempfile" }
+gix-utils = { workspace=true }
+gix-tempfile = { workspace=true }
 thiserror = "2.0.17"
 
 [dev-dependencies]

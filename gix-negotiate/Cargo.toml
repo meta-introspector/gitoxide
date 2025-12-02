@@ -2,13 +2,13 @@ lints.workspace = true
 
 [package]
 name = "gix-negotiate"
-version = "0.23.0"
+
 repository = "https://github.com/GitoxideLabs/gitoxide"
 license = "MIT OR Apache-2.0"
 description = "A crate of the gitoxide project implementing negotiation algorithms"
 authors = ["Sebastian Thiel <sebastian.thiel@icloud.com>"]
 edition = "2021"
-rust-version = "1.82"
+rust-workspace=true
 include = ["src/**/*", "LICENSE-*"]
 
 [lib]
@@ -16,16 +16,16 @@ doctest = false
 test = false
 
 [dependencies]
-gix-hash = { version = "^0.20.0", path = "../gix-hash" }
-gix-object = { version = "^0.52.0", path = "../gix-object" }
-gix-date = { version = "^0.11.0", path = "../gix-date" }
-gix-commitgraph = { version = "^0.30.0", path = "../gix-commitgraph" }
-gix-revwalk = { version = "^0.23.0", path = "../gix-revwalk" }
+gix-hash = { workspace=true }
+gix-object = { workspace=true }
+gix-date = { workspace=true }
+gix-commitgraph = { workspace=true }
+gix-revwalk = { workspace=true }
 thiserror = "2.0.17"
-smallvec = "1.15.1"
+smallvec = { workspace = true }
 bitflags = "2"
 
 [dev-dependencies]
-gix-testtools = { path = "../tests/tools" }
-gix-odb = { path = "../gix-odb" }
-gix-ref = { path = "../gix-ref" }
+gix-testtools = { workspace=true }
+gix-odb = {  }
+gix-ref = {  }
