@@ -21,7 +21,7 @@ pub enum Error {
 /// It's used in conjunction with
 #[derive(Default, Clone)]
 pub struct TimeBuf {
-    buf: SmallVec<[u8; Time::MAX.size()]>,
+    buf: SmallVec<u8, {Time::MAX.size()}>,
 }
 
 impl TimeBuf {
