@@ -170,9 +170,9 @@ pub(crate) mod function {
                 if has_globs {
                     // For one-sided refspecs, skip validation of glob patterns
                     if !is_one_sided {
-                        let mut buf = smallvec::SmallVec::<[u8; 256]>::with_capacity(spec.len());
-                        buf.extend_from_slice(spec);
-                        let glob_pos = buf.find_byte(b'*').expect("glob present");
+                        let mut buf = smallvec::SmallVec::<u8, 256>::with_capacity(spec.len());
+                        buf.extend_from_slice(spec.as_bytes());
+                        let glob_pos = buf.as_bstr().find_byte(b'*').expect("glob present");
                         buf[glob_pos] = b'a';
                         gix_validate::reference::name_partial(buf.as_bstr())?;
                     }
