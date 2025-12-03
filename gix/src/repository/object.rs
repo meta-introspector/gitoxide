@@ -293,7 +293,7 @@ impl crate::Repository {
         reference: FullName,
         message: &str,
         tree: ObjectId,
-        parents: SmallVec<[ObjectId; 1], 1>,
+        parents: SmallVec<ObjectId, 1>,
     ) -> Result<Id<'_>, commit::Error> {
         use gix_ref::{
             transaction::{Change, RefEdit},

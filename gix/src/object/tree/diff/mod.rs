@@ -205,8 +205,8 @@ impl Platform<'_, '_> {
                 .flatten()
             {
                 files_changed += 1;
-                lines_added += u64::from(counts.insertions);
-                lines_removed += u64::from(counts.removals);
+                lines_added += u64::from(counts.1);
+                lines_removed += u64::from(counts.0);
             }
 
             resource_cache.clear_resource_cache_keep_allocation();

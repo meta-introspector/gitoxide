@@ -10,7 +10,7 @@ use crate::{
     Repository,
 };
 
-type Replacements = SmallVec<[(ObjectId, ObjectId); 1], 1>;
+type Replacements = SmallVec<(ObjectId, ObjectId), 1>;
 
 impl<'repo> Delegate<'repo> {
     pub fn new(repo: &'repo Repository, opts: crate::revision::spec::parse::Options) -> Self {
