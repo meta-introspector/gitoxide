@@ -230,8 +230,8 @@ impl Outcome {
     /// Note that [`Self::blob`] must be tokenized in exactly the same way as the tokenizer that was used
     /// to perform the diffs, which is what this method assures.
     pub fn entries_with_lines(&self) -> impl Iterator<Item = (BlameEntry, Vec<BString>)> + '_ {
-        use gix_diff::blob::intern::TokenSource;
-        let mut interner = gix_diff::blob::intern::Interner::new(self.blob.len() / 100);
+        use imara_diff::TokenSource;
+        let mut interner = imara_diff::Interner::new(self.blob.len() / 100);
         let lines_as_tokens: Vec<_> = tokens_for_diffing(&self.blob)
             .tokenize()
             .map(|token| interner.intern(token))
@@ -386,7 +386,7 @@ pub struct UnblamedHunk {
     /// Maps a commit to the range in a source file (i.e. *Blamed File* at a revision) that is
     /// equal to `range_in_blamed_file`. Since `suspects` rarely contains more than 1 item, it can
     /// efficiently be stored as a `SmallVec`.
-    pub suspects: SmallVec<[(ObjectId, Range<u32>); 1]>,
+    pub suspects: SmallVec<(ObjectId, Range<u32>), 1>,
     /// The *Source File*'s name, in case it differs from *Blamed File*'s name.
     pub source_file_name: Option<BString>,
 }

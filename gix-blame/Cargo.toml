@@ -21,14 +21,16 @@ gix-hash = { workspace=true }
 gix-worktree = { workspace=true, features = ["attributes"] }
 gix-traverse = { workspace=true }
 
+imara-diff = { path = "../../imara-diff" }
+
 smallvec = { workspace = true }
 thiserror = "2.0.17"
 
 [dev-dependencies]
-gix-ref = {  }
-gix-filter = {  }
-gix-fs = {  }
-gix-index = {  }
-gix-odb = {  }
+gix-ref = { workspace=true }
+gix-filter = { workspace=true }
+gix-fs = { workspace=true }
+gix-index = { workspace=true }
+gix-odb = { workspace=true }
 gix-testtools = { workspace=true }
 pretty_assertions = "1.4.0"

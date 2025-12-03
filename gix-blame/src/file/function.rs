@@ -1,6 +1,7 @@
 use std::{num::NonZeroU32, ops::Range};
 
-use gix_diff::{blob::intern::TokenSource, tree::Visit};
+use gix_diff::tree::Visit;
+use imara_diff::TokenSource;
 use gix_hash::ObjectId;
 use gix_object::{
     bstr::{BStr, BString},
@@ -204,13 +205,13 @@ pub fn file(
         #[cfg(debug_assertions)]
         {
             let source_blob = odb.find_blob(&entry_id, &mut buf)?.data.to_vec();
-            let mut source_interner = gix_diff::blob::intern::Interner::new(source_blob.len() / 100);
+            let mut source_interner = imara_diff::Interner::new(source_blob.len() / 100);
             let source_lines_as_tokens: Vec<_> = tokens_for_diffing(&source_blob)
                 .tokenize()
                 .map(|token| source_interner.intern(token))
                 .collect();
 
-            let mut blamed_interner = gix_diff::blob::intern::Interner::new(blamed_file_blob.len() / 100);
+            let mut blamed_interner = imara_diff::Interner::new(blamed_file_blob.len() / 100);
             let blamed_lines_as_tokens: Vec<_> = tokens_for_diffing(&blamed_file_blob)
                 .tokenize()
                 .map(|token| blamed_interner.intern(token))
@@ -755,61 +756,10 @@ fn blob_changes(
     previous_oid: ObjectId,
     file_path: &BStr,
     previous_file_path: &BStr,
-    diff_algorithm: gix_diff::blob::Algorithm,
+    diff_algorithm: imara_diff::Algorithm,
     stats: &mut Statistics,
 ) -> Result<Vec<Change>, Error> {
-    /// Record all [`Change`]s to learn about additions, deletions and unchanged portions of a *Source File*.
-    struct ChangeRecorder {
-        last_seen_after_end: u32,
-        hunks: Vec<Change>,
-        total_number_of_lines: u32,
-    }
 
-    impl ChangeRecorder {
-        /// `total_number_of_lines` is used to fill in the last unchanged hunk if needed
-        /// so that the entire file is represented by [`Change`].
-        fn new(total_number_of_lines: u32) -> Self {
-            ChangeRecorder {
-                last_seen_after_end: 0,
-                hunks: Vec::new(),
-                total_number_of_lines,
-            }
-        }
-    }
-
-    impl gix_diff::blob::Sink for ChangeRecorder {
-        type Out = Vec<Change>;
-
-        fn process_change(&mut self, before: Range<u32>, after: Range<u32>) {
-            // This checks for unchanged hunks.
-            if after.start > self.last_seen_after_end {
-                self.hunks
-                    .push(Change::Unchanged(self.last_seen_after_end..after.start));
-            }
-
-            match (!before.is_empty(), !after.is_empty()) {
-                (_, true) => {
-                    self.hunks.push(Change::AddedOrReplaced(
-                        after.start..after.end,
-                        before.end - before.start,
-                    ));
-                }
-                (true, false) => {
-                    self.hunks.push(Change::Deleted(after.start, before.end - before.start));
-                }
-                (false, false) => unreachable!("BUG: imara-diff provided a non-change"),
-            }
-            self.last_seen_after_end = after.end;
-        }
-
-        fn finish(mut self) -> Self::Out {
-            if self.total_number_of_lines > self.last_seen_after_end {
-                self.hunks
-                    .push(Change::Unchanged(self.last_seen_after_end..self.total_number_of_lines));
-            }
-            self.hunks
-        }
-    }
 
     resource_cache.set_resource(
         previous_oid,
@@ -827,16 +777,47 @@ fn blob_changes(
     )?;
 
     let outcome = resource_cache.prepare_diff()?;
-    let input = gix_diff::blob::intern::InternedInput::new(
+    let input = imara_diff::InternedInput::new(
         tokens_for_diffing(outcome.old.data.as_slice().unwrap_or_default()),
         tokens_for_diffing(outcome.new.data.as_slice().unwrap_or_default()),
     );
     let number_of_lines_in_destination = input.after.len();
-    let change_recorder = ChangeRecorder::new(number_of_lines_in_destination as u32);
 
-    let res = gix_diff::blob::diff(diff_algorithm, &input, change_recorder);
+    let mut diff = imara_diff::Diff::compute(diff_algorithm, &input);
+    diff.postprocess_lines(&input); // Apply post-processing for readability
+
+    let mut hunks: Vec<Change> = Vec::new();
+    let mut last_seen_after_end = 0;
+
+    for hunk in diff.hunks() {
+        // Unchanged lines before this hunk
+        if hunk.after.start > last_seen_after_end {
+            hunks.push(Change::Unchanged(last_seen_after_end..hunk.after.start));
+        }
+
+        // Added or Replaced lines
+        if !hunk.after.is_empty() {
+            hunks.push(Change::AddedOrReplaced(
+                hunk.after.start..hunk.after.end,
+                (hunk.before.end - hunk.before.start) as u32,
+            ));
+        } else if !hunk.before.is_empty() {
+            // Deleted lines
+            hunks.push(Change::Deleted(
+                hunk.after.start as u32,
+                (hunk.before.end - hunk.before.start) as u32,
+            ));
+        }
+        last_seen_after_end = hunk.after.end;
+    }
+
+    // Add any remaining unchanged lines at the end
+    if number_of_lines_in_destination > last_seen_after_end {
+        hunks.push(Change::Unchanged(last_seen_after_end..number_of_lines_in_destination));
+    }
+
     stats.blobs_diffed += 1;
-    Ok(res)
+    Ok(hunks)
 }
 
 fn find_path_entry_in_commit(
@@ -896,5 +877,5 @@ fn collect_parents(
 /// Return an iterator over tokens for use in diffing. These are usually lines, but it's important
 /// to unify them so the later access shows the right thing.
 pub(crate) fn tokens_for_diffing(data: &[u8]) -> impl TokenSource<Token = &[u8]> {
-    gix_diff::blob::sources::byte_lines_with_terminator(data)
+    data.tokenize()
 }
