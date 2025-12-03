@@ -139,7 +139,7 @@ impl<'a> Section<'a> {
     }
 
     /// Returns a mutable version of this section for adjustment of values.
-    pub fn to_mut(&mut self, newline: SmallVec<[u8; 2]>) -> SectionMut<'_, 'a> {
+    pub fn to_mut(&mut self, newline: SmallVec<u8, 2>) -> SectionMut<'_, 'a> {
         SectionMut::new(self, newline)
     }
 }

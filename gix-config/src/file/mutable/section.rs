@@ -24,7 +24,7 @@ pub struct SectionMut<'a, 'event> {
     section: &'a mut Section<'event>,
     implicit_newline: bool,
     whitespace: Whitespace<'event>,
-    newline: SmallVec<[u8; 2]>,
+    newline: SmallVec<u8, 2>,
 }
 
 /// Mutating methods.
@@ -221,7 +221,7 @@ impl<'event> SectionMut<'_, 'event> {
 
 // Internal methods that may require exact indices for faster operations.
 impl<'a, 'event> SectionMut<'a, 'event> {
-    pub(crate) fn new(section: &'a mut Section<'event>, newline: SmallVec<[u8; 2]>) -> Self {
+    pub(crate) fn new(section: &'a mut Section<'event>, newline: SmallVec<u8, 2>) -> Self {
         let whitespace = Whitespace::from_body(&section.body);
         Self {
             section,

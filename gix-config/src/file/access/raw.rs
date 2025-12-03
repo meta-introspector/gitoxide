@@ -174,7 +174,7 @@ impl<'event> File<'event> {
             }
 
             drop(section_ids);
-            let nl = self.detect_newline_style().to_smallvec();
+            let nl = self.detect_newline_style().to_vec();
             return Ok(ValueMut {
                 section: self.sections.get_mut(&section_id).expect("known section-id").to_mut(nl),
                 key,

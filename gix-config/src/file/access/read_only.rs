@@ -452,7 +452,7 @@ impl<'event> File<'event> {
             .unwrap_or_else(|| platform_newline())
     }
 
-    pub(crate) fn detect_newline_style_smallvec(&self) -> SmallVec<[u8; 2]> {
+    pub(crate) fn detect_newline_style_smallvec(&self) -> SmallVec<u8, 2> {
         self.detect_newline_style().as_bytes().into()
     }
 }

@@ -6,7 +6,7 @@ use crate::{
 };
 
 /// A type store without allocation all events that are typically preceding the first section.
-pub type FrontMatterEvents<'a> = SmallVec<[Event<'a>; 8]>;
+pub type FrontMatterEvents<'a> = SmallVec<Event<'a>, 8>;
 
 /// A zero-copy `git-config` file parser.
 ///
