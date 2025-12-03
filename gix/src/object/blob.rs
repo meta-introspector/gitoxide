@@ -6,7 +6,7 @@ pub mod diff {
     use std::ops::Range;
 
     use gix_diff::blob::platform::prepare_diff::Operation;
-    use imara_diff::{self, Algorithm, Diff, InternedInput};
+    use gix_diff::imara_diff::{self, Algorithm, Diff, InternedInput};
 
     use crate::bstr::ByteSlice;
 
