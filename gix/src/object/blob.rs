@@ -1,5 +1,5 @@
 use crate::{Blob, ObjectDetached};
-
+use gix_diff::imara_diff::{self, Algorithm, Diff, InternedInput};
 ///
 #[cfg(feature = "blob-diff")]
 pub mod diff {
@@ -175,3 +175,46 @@ impl Blob<'_> {
         std::mem::take(&mut self.data)
     }
 }
+
+
+
+// sed -i '/gix_diff::blob::diff(algorithm, &input, |before: Range<u32>, after: Range<u32>| {/,/});/c\
+//                     let input = prep.interned_input();\
+//                     let mut err = None;\
+//                     let mut lines = Vec::new();\
+// \
+//                     let diff = imara_diff::Diff::compute(algorithm, &input);\
+//                     for hunk in diff.hunks() {\
+//                         if err.is_some() {\
+//                             break;\
+//                         }\
+//                         lines.clear();\
+//                         lines.extend(\ 
+//                             input.before[hunk.before.start as usize..hunk.before.end as usize]\
+//                                 .iter()\
+//                                 .map(|&line| input.interner[line].as_bstr()),\
+//                         );\
+//                         let end_of_before = lines.len();\
+//                         lines.extend(\ 
+//                             input.after[hunk.after.start as usize..hunk.after.end as usize]\
+//                                 .iter()\
+//                                 .map(|&line| input.interner[line].as_bstr()),\
+//                         );\
+//                         let hunk_before = &lines[..end_of_before];\
+//                         let hunk_after = &lines[end_of_before..];\
+//                         if hunk_after.is_empty() {\
+//                             err = process_hunk(lines::Change::Deletion { lines: hunk_before }).err();\
+//                         } else if hunk_before.is_empty() {\
+//                             err = process_hunk(lines::Change::Addition { lines: hunk_after }).err();\
+//                         } else {\
+//                             err = process_hunk(lines::Change::Modification {\
+//                                 lines_before: hunk_before,\
+//                                 lines_after: hunk_after,
+//                             })
+//                             .err();\
+//                         }\
+//                     }\
+// \
+//                     if let Some(err) = err {\
+//                         return Err(lines::Error::ProcessHunk(err));\
+//                     }

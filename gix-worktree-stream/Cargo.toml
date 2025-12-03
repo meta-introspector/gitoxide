@@ -30,5 +30,5 @@ parking_lot = {workspace=true}
 
 [dev-dependencies]
 gix-testtools = { workspace=true }
-gix-odb = {  }
-gix-worktree = {features = ["attributes"] }
+gix-odb = { workspace=true }
+gix-worktree = { workspace=true, features = ["attributes"] }

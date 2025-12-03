@@ -1,7 +1,7 @@
 use std::{borrow::Cow, collections::HashMap};
 
 use bstr::BStr;
-use smallvec::ToSmallVec;
+
 
 use crate::{
     file::{mutable::multi_value::EntryData, Index, Metadata, MultiValueMut, Size, ValueMut},

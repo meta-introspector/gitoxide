@@ -52,7 +52,7 @@ pub enum Parents {
 /// The collection of parent ids we saw as part of the iteration.
 ///
 /// Note that this list is truncated if [`Parents::First`] was used.
-pub type ParentIds = SmallVec<[gix_hash::ObjectId; 1]>;
+pub type ParentIds = SmallVec<gix_hash::ObjectId, 1>;
 
 /// Information about a commit that we obtained naturally as part of the iteration.
 #[derive(Debug, Clone, PartialEq, Eq, Ord, PartialOrd, Hash)]

@@ -42,7 +42,7 @@ serde = { workspace=true, optional = true, features = ["derive"] }
 document-features = { workspace=true, optional = true }
 
 [dev-dependencies]
-gix-odb = {  }
+gix-odb = { workspace=true }
 gix-testtools = { workspace=true }
 permutohedron = "0.2.4"
 

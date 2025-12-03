@@ -115,7 +115,7 @@ where
         let parents = self.collect_parents(id)?;
         self.process_parents(id, &parents)?;
 
-        for (pid, (parent_gen, parent_commit_time)) in parents {
+        for &(pid, (parent_gen, parent_commit_time)) in &parents {
             let parent_state = self.states.get(&pid).ok_or(Error::MissingStateUnexpected)?;
             if parent_state.contains(WalkFlags::Uninteresting) {
                 continue;
@@ -182,7 +182,7 @@ where
         Ok(())
     }
 
-    fn collect_parents(&mut self, id: &oid) -> Result<SmallVec<[(ObjectId, GenAndCommitTime); 1]>, Error> {
+    fn collect_parents(&mut self, id: &oid) -> Result<SmallVec<(ObjectId, GenAndCommitTime), 1>, Error> {
         collect_parents(
             &mut self.commit_graph,
             &self.find,
@@ -196,7 +196,7 @@ where
     pub(super) fn collect_all_parents(
         &mut self,
         id: &oid,
-    ) -> Result<SmallVec<[(ObjectId, GenAndCommitTime); 1]>, Error> {
+    ) -> Result<SmallVec<(ObjectId, GenAndCommitTime), 1>, Error> {
         collect_parents(&mut self.commit_graph, &self.find, id, false, &mut self.buf)
     }
 
@@ -245,11 +245,11 @@ fn collect_parents<Find>(
     id: &oid,
     first_only: bool,
     buf: &mut Vec<u8>,
-) -> Result<SmallVec<[(ObjectId, GenAndCommitTime); 1]>, Error>
+) -> Result<SmallVec<(ObjectId, GenAndCommitTime), 1>, Error>
 where
     Find: gix_object::Find,
 {
-    let mut parents = SmallVec::<[(ObjectId, GenAndCommitTime); 1]>::new();
+    let mut parents = SmallVec::<(ObjectId, GenAndCommitTime), 1>::new();
     match find(cache.as_ref(), &f, id, buf)? {
         Either::CommitRefIter(c) => {
             for token in c {

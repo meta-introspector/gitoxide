@@ -31,5 +31,5 @@ thiserror = "2.0.17"
 
 [dev-dependencies]
 gix-testtools = { workspace=true }
-gix-fs = {  }
+gix-fs = { workspace = true }
 pretty_assertions = "1.4.0"

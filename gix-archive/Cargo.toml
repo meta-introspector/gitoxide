@@ -33,7 +33,7 @@ gix-path = { workspace=true, optional = true }
 gix-date = { workspace=true }
 
 flate2 = { workspace=true, optional = true, features = ["zlib-rs"] }
-zip = { workspace=true, optional = true, features = ["deflate-flate2"] }
+zip = { workspace=true, optional = true }
 jiff = { workspace=true, features = ["std"] }
 
 thiserror = "2.0.17"
@@ -45,14 +45,14 @@ document-features = { workspace=true, optional = true }
 
 [dev-dependencies]
 gix-testtools = { workspace=true }
-gix-odb = {  }
-gix-worktree = {features = [
+gix-odb = { workspace=true }
+gix-worktree = { workspace=true, features = [
     "attributes",
 ] }
-gix-hash = {  }
-gix-attributes = {  }
-gix-object = {  }
-gix-filter = {  }
+gix-hash = { workspace=true }
+gix-attributes = { workspace=true }
+gix-object = { workspace=true }
+gix-filter = { workspace=true }
 
 [package.metadata.docs.rs]
 all-features = true

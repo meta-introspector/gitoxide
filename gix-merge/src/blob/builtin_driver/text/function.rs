@@ -1,11 +1,12 @@
 use std::ops::Range;
+use imara_diff::{Diff, InternedInput, Token};
 
 use crate::blob::{
     builtin_driver::text::{
         utils::{
             assure_ends_with_nl, contains_lines, detect_line_ending, detect_line_ending_or_nl, fill_ancestor,
             hunks_differ_in_diff3, take_intersecting, tokens, write_ancestor, write_conflict_marker, write_hunks,
-            zealously_contract_hunks, CollectHunks, Hunk, Side,
+            zealously_contract_hunks, Hunk, Side,
         },
         Conflict, ConflictStyle, Labels, Options,
     },
@@ -27,7 +28,7 @@ use crate::blob::{
 #[allow(clippy::too_many_arguments)]
 pub fn merge<'a>(
     out: &mut Vec<u8>,
-    input: &mut imara_diff::intern::InternedInput<&'a [u8]>,
+    input: &mut InternedInput<&'a [u8]>,
     Labels {
         ancestor: ancestor_label,
         current: current_label,
@@ -45,26 +46,22 @@ pub fn merge<'a>(
     input.update_before(tokens(ancestor));
     input.update_after(tokens(current));
 
-    let hunks = imara_diff::diff(
-        diff_algorithm,
-        input,
-        CollectHunks {
-            side: Side::Current,
-            hunks: Vec::new(),
-        },
-    );
+    let mut current_diff = Diff::compute(diff_algorithm, input);
+    let mut hunks = current_diff.hunks().map(|hunk| Hunk {
+        before: hunk.before,
+        after: hunk.after,
+        side: Side::Current,
+    }).collect::<Vec<_>>();
 
     let current_tokens = std::mem::take(&mut input.after);
     input.update_after(tokens(other));
 
-    let mut hunks = imara_diff::diff(
-        diff_algorithm,
-        input,
-        CollectHunks {
-            side: Side::Other,
-            hunks,
-        },
-    );
+    let other_diff = Diff::compute(diff_algorithm, input);
+    hunks.extend(other_diff.hunks().map(|hunk| Hunk {
+        before: hunk.before,
+        after: hunk.after,
+        side: Side::Other,
+    }));
 
     if hunks.is_empty() {
         write_ancestor(input, 0, input.before.len(), out);

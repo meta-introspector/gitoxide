@@ -89,7 +89,7 @@ pub(super) struct State {
     buf: Vec<u8>,
     seen: gix_revwalk::graph::IdMap<CommitState>,
     parents_buf: Vec<u8>,
-    parent_ids: SmallVec<[(ObjectId, SecondsSinceUnixEpoch); 2]>,
+    parent_ids: SmallVec<(ObjectId, SecondsSinceUnixEpoch), 2>,
     /// The list (FIFO) of thus far interesting commits.
     ///
     /// As they may turn hidden later, we have to keep them until the conditions are met to return them.
@@ -729,7 +729,7 @@ mod init {
 }
 
 fn collect_parents(
-    dest: &mut SmallVec<[(gix_hash::ObjectId, gix_date::SecondsSinceUnixEpoch); 2]>,
+    dest: &mut SmallVec<(gix_hash::ObjectId, gix_date::SecondsSinceUnixEpoch), 2>,
     cache: Option<&gix_commitgraph::Graph>,
     parents: gix_commitgraph::file::commit::Parents<'_>,
 ) -> bool {

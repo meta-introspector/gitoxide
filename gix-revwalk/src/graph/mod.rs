@@ -137,7 +137,7 @@ impl<'cache, T> Graph<'_, 'cache, T> {
         first_parent: bool,
     ) -> Result<(), insert_parents::Error> {
         let commit = self.lookup(id)?;
-        let parents: SmallVec<[_; 2]> = commit.iter_parents().collect();
+        let parents: SmallVec<_, 2> = commit.iter_parents().collect();
         for parent_id in parents {
             let parent_id = parent_id?;
             match self.map.entry(parent_id) {
@@ -178,7 +178,7 @@ impl<'cache, T> Graph<'_, 'cache, T> {
             + From<commit::iter_parents::Error>,
     {
         let commit = self.lookup(id).map_err(E::from)?;
-        let parents: SmallVec<[_; 2]> = commit.iter_parents().collect();
+        let parents: SmallVec<_, 2> = commit.iter_parents().collect();
         for parent_id in parents {
             let parent_id = parent_id.map_err(E::from)?;
             let parent = match try_lookup(&parent_id, &*self.find, self.cache, &mut self.parent_buf).map_err(E::from)? {
@@ -398,7 +398,7 @@ impl<'a, T> Index<&'a gix_hash::oid> for Graph<'_, '_, T> {
 /// A commit that contains all information we can obtain through the commit-graph, which is typically enough to fuel any graph iteration.
 pub struct Commit<T> {
     /// The parents of the commit.
-    pub parents: SmallVec<[gix_hash::ObjectId; 1]>,
+    pub parents: SmallVec<gix_hash::ObjectId, 1>,
     /// The time at which the commit was created.
     pub commit_time: SecondsSinceUnixEpoch,
     /// The generation of the commit, if available.

@@ -43,8 +43,8 @@ document-features = { workspace=true, optional = true }
 
 [dev-dependencies]
 gix-testtools = { workspace=true }
-gix-odb = {  }
-gix-utils = {  }
+gix-odb = { workspace=true }
+gix-utils = { workspace=true }
 termtree = "0.5.1"
 pretty_assertions = "1.4.0"
 

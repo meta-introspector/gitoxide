@@ -94,7 +94,7 @@ impl<'driver> Configuration<'driver> {
         }
 
         attributes(rela_path, attrs);
-        let attrs: SmallVec<[_; crate::pipeline::ATTRS.len()]> = attrs.iter_selected().collect();
+        let attrs: SmallVec<_, {crate::pipeline::ATTRS.len()}> = attrs.iter_selected().collect();
         let apply_ident_filter = attrs[1].assignment.state.is_set();
         let driver = extract_driver(drivers, &attrs[2]);
         let encoding = extract_encoding(&attrs[5])?;

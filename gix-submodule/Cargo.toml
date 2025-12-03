@@ -26,4 +26,4 @@ thiserror = "2.0.17"
 
 [dev-dependencies]
 gix-testtools = { workspace=true }
-gix-features = {features = ["walkdir"] }
+gix-features = { workspace = true, features = ["walkdir"] }

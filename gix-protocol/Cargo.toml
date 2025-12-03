@@ -57,14 +57,16 @@ fetch = [
 ## Data structures implement `serde::Serialize` and `serde::Deserialize`.
 serde = ["dep:serde", "bstr/serde", "gix-transport/serde", "gix-hash/serde", "gix-shallow/serde"]
 
-[[test]]
-name = "blocking"
 
+
+[[test]]
+name = "blocking_protocol"
+path = "tests/blocking-protocol.rs"
 required-features = ["blocking-client"]
 
 [[test]]
-name = "async"
-
+name = "async_protocol"
+path = "tests/async-protocol.rs"
 required-features = ["async-client"]
 
 [dependencies]

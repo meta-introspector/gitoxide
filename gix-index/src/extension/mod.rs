@@ -21,7 +21,7 @@ pub struct Iter<'a> {
 #[derive(PartialEq, Eq, Clone, Debug)]
 pub struct Tree {
     /// The name of the tree/directory, or empty if it's the root tree.
-    pub name: SmallVec<[u8; 23]>,
+    pub name: SmallVec<u8, 23>,
     /// The id of the directory tree of the associated tree object.
     pub id: gix_hash::ObjectId,
     /// The amount of non-tree items in this directory tree, including sub-trees, recursively.

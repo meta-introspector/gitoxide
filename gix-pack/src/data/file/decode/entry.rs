@@ -199,7 +199,7 @@ impl File {
         cache: &mut dyn cache::DecodeEntry,
     ) -> Result<Outcome, Error> {
         // all deltas, from the one that produces the desired object (first) to the oldest at the end of the chain
-        let mut chain = SmallVec::<[Delta; 10]>::default();
+        let mut chain = SmallVec::<Delta, 10>::default();
         let first_entry = last.clone();
         let mut cursor = last;
         let mut base_buffer_size: Option<usize> = None;

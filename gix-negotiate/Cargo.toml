@@ -27,5 +27,5 @@ bitflags = "2"
 
 [dev-dependencies]
 gix-testtools = { workspace=true }
-gix-odb = {  }
-gix-ref = {  }
+gix-odb = { workspace = true }
+gix-ref = { workspace = true }
