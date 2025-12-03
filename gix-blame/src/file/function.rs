@@ -861,7 +861,7 @@ fn find_path_entry_in_commit(
     Ok(res.map(|e| e.oid))
 }
 
-type ParentIds = SmallVec<[(gix_hash::ObjectId, i64); 2]>;
+type ParentIds = SmallVec<(gix_hash::ObjectId, i64), 2>;
 
 fn collect_parents(
     commit: gix_traverse::commit::Either<'_, '_>,
