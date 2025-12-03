@@ -336,7 +336,7 @@ gix-negotiate = { workspace=true, optional = true }
 gix-path = { workspace=true }
 gix-url = { workspace=true }
 gix-traverse = { workspace=true }
-gix-diff = { workspace=true }
+gix-diff = { workspace=true, features = ["blob"] }
 gix-merge = { workspace=true, optional = true }
 gix-mailmap = { workspace=true, optional = true }
 gix-features = { workspace=true, features = [
@@ -395,7 +395,7 @@ document-features = { workspace=true, optional = true }
 
 [dev-dependencies]
 # For additional features that aren't enabled by default due to MSRV
-gix = {features = [
+gix = {path = ".", features = [
     "need-more-recent-msrv",
 ] }
 pretty_assertions = "1.4.0"
