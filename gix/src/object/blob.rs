@@ -5,7 +5,10 @@ use crate::{Blob, ObjectDetached};
 pub mod diff {
     use std::ops::Range;
 
-    use gix_diff::blob::platform::prepare_diff::Operation;
+    use gix_diff::{
+        blob::platform::prepare_diff::Operation,
+        imara_diff::{self, Algorithm, Diff, InternedInput},
+    };
 
     use crate::bstr::ByteSlice;
 
@@ -84,19 +87,20 @@ pub mod diff {
                     let mut err = None;
                     let mut lines = Vec::new();
 
-                    gix_diff::blob::diff(algorithm, &input, |before: Range<u32>, after: Range<u32>| {
+                    let diff = imara_diff::Diff::compute(algorithm, &input);
+                    for hunk in diff.hunks() {
                         if err.is_some() {
-                            return;
+                            break;
                         }
                         lines.clear();
                         lines.extend(
-                            input.before[before.start as usize..before.end as usize]
+                            input.before[hunk.before.start as usize..hunk.before.end as usize]
                                 .iter()
                                 .map(|&line| input.interner[line].as_bstr()),
                         );
                         let end_of_before = lines.len();
                         lines.extend(
-                            input.after[after.start as usize..after.end as usize]
+                            input.after[hunk.after.start as usize..hunk.after.end as usize]
                                 .iter()
                                 .map(|&line| input.interner[line].as_bstr()),
                         );
@@ -113,7 +117,7 @@ pub mod diff {
                             })
                             .err();
                         }
-                    });
+                    }
 
                     if let Some(err) = err {
                         return Err(lines::Error::ProcessHunk(err));
@@ -131,15 +135,15 @@ pub mod diff {
         /// Note that nothing will happen if one of the inputs is binary, and `None` will be returned.
         pub fn line_counts(
             &mut self,
-        ) -> Result<Option<gix_diff::blob::sink::Counter<()>>, gix_diff::blob::platform::prepare_diff::Error> {
+        ) -> Result<Option<(u32, u32)>, gix_diff::blob::platform::prepare_diff::Error> {
             self.resource_cache.options.skip_internal_diff_if_external_is_configured = false;
 
             let prep = self.resource_cache.prepare_diff()?;
             match prep.operation {
                 Operation::InternalDiff { algorithm } => {
-                    let tokens = prep.interned_input();
-                    let counter = gix_diff::blob::diff(algorithm, &tokens, gix_diff::blob::sink::Counter::default());
-                    Ok(Some(counter))
+                    let input = prep.interned_input();
+                    let diff = imara_diff::Diff::compute(algorithm, &input);
+                    Ok(Some((diff.count_removals(), diff.count_additions())))
                 }
                 Operation::ExternalCommand { .. } => {
                     unreachable!("we disabled that")
