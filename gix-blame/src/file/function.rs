@@ -781,13 +781,13 @@ fn blob_changes(
         tokens_for_diffing(outcome.old.data.as_slice().unwrap_or_default()),
         tokens_for_diffing(outcome.new.data.as_slice().unwrap_or_default()),
     );
-    let number_of_lines_in_destination = input.after.len();
+    let number_of_lines_in_destination = input.after.len() as u32;
 
     let mut diff = imara_diff::Diff::compute(diff_algorithm, &input);
     diff.postprocess_lines(&input); // Apply post-processing for readability
 
     let mut hunks: Vec<Change> = Vec::new();
-    let mut last_seen_after_end = 0;
+    let mut last_seen_after_end: u32 = 0;
 
     for hunk in diff.hunks() {
         // Unchanged lines before this hunk
