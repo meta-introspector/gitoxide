@@ -1,3 +1,4 @@
+use libc::unix::linux_like::linux::gnu::b64::x86_64::siginfo_t;
 use std::sync::LazyLock;
 
 use crate::REGISTRY;
@@ -49,7 +50,7 @@ pub mod handler {
 
     /// On linux we can handle the actual signal as we know it.
     #[cfg(not(windows))]
-    pub(crate) fn cleanup_tempfiles_nix(sig: &libc::siginfo_t) {
+    pub(crate) fn cleanup_tempfiles_nix(sig: &siginfo_t) {
         crate::registry::cleanup_tempfiles_signal_safe();
         let restore_original_behaviour = Mode::DeleteTempfilesOnTerminationAndRestoreDefaultBehaviour as usize;
         if MODE.load(std::sync::atomic::Ordering::SeqCst) == restore_original_behaviour {
