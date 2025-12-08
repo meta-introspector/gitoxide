@@ -1,4 +1,4 @@
-use libc::unix::linux_like::linux::gnu::b64::x86_64::siginfo_t;
+use libc::siginfo_t;
 use std::sync::LazyLock;
 
 use crate::REGISTRY;
@@ -19,6 +19,7 @@ pub fn setup(mode: handler::Mode) {
 ///
 pub mod handler {
     use std::sync::atomic::AtomicUsize;
+    use libc::siginfo_t;
 
     pub(crate) static MODE: AtomicUsize = AtomicUsize::new(Mode::None as usize);
 

@@ -15,6 +15,10 @@ pub use gix_command as command;
 #[cfg(feature = "blob")]
 pub use gix_object as object;
 
+/// Re-export for use in public API.
+#[cfg(feature = "blob")]
+pub use imara_diff;
+
 /// A structure to capture how to perform rename and copy tracking, used by the [rewrites::Tracker].
 #[derive(Debug, Copy, Clone, PartialEq)]
 #[cfg(feature = "blob")]
